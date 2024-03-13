@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { FC, ReactNode } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 import { useAppSelector } from '../hooks/useAppSelector'
 
@@ -14,12 +14,12 @@ export interface PrivateRoutesProps {
 	children: ReactNode
 }
 
-const PrivateRoutes = ({ children }: any) => {
+const PrivateRoutes: FC<PrivateRoutesProps> = ({ children }) => {
 	const location = useLocation()
 	const { isAuthenticated } = useAppSelector(store => store.auth)
 
 	return isAuthenticated ? (
-		children
+		<>{children}</>
 	) : (
 		<Navigate to={'/login'} state={{ from: location }} />
 	)
