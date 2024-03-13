@@ -1,15 +1,13 @@
-import { Route, Routes } from 'react-router-dom'
+import { Link, Route, Routes } from 'react-router-dom'
 import { useAppSelector } from '../hooks/useAppSelector'
 import ClientPage from '../pages/clientPage'
 import DriverPage from '../pages/driverPage'
 import Layout from '../pages/layout'
 import LoginPage from '../pages/loginPage'
 import MainPage from '../pages/mainPage'
-import PrivateRoutes, { PrivateRoute } from './privateRoutes'
+import PrivateRoutes, { PrivateRoute, Roles } from './privateRoutes'
 
 const AppRouter = () => {
-	const { isAuthenticated } = useAppSelector(store => store.auth)
-
 	const publicRoutes = [
 		{
 			path: '/login',
@@ -20,29 +18,45 @@ const AppRouter = () => {
 		{
 			path: '/main',
 			element: <MainPage />,
-			role: 'Admin',
+			roles: ['admin'],
 		},
 		{
 			path: '/driver',
 			element: <DriverPage />,
-			role: 'Driver',
+			roles: ['driver'],
 		},
 		{
 			path: '/client',
 			element: <ClientPage />,
-			role: 'Client',
+			roles: ['client'],
 		},
 	]
+
+	const { user } = useAppSelector(store => store.auth)
 	return (
 		<Routes>
 			<Route path='/' element={<Layout />}>
-				<Route path='/login' element={<LoginPage />} />
-				{privateRoutes.map(route => (
-					<Route
-						path={route.path}
-						element={<PrivateRoutes>{route.element}</PrivateRoutes>}
-					/>
+				{publicRoutes.map(route => (
+					<Route path={route.path} element={route.element} />
 				))}
+				{privateRoutes.map(route =>
+					route.roles.includes(user?.role as Roles) ? (
+						<Route
+							path={route.path}
+							element={<PrivateRoutes>{route.element}</PrivateRoutes>}
+						/>
+					) : (
+						<Route
+							path={route.path}
+							element={
+								<div>
+									У вас нет доступа к этой странице!
+									<Link to={'/'}>Вернуться на главную</Link>
+								</div>
+							}
+						/>
+					)
+				)}
 			</Route>
 		</Routes>
 	)

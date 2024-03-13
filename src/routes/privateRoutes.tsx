@@ -5,8 +5,10 @@ import { useAppSelector } from '../hooks/useAppSelector'
 export interface PrivateRoute {
 	path: string
 	element: ReactNode
-	role: 'Admin' | 'Driver' | 'Client'
+	roles: Roles[]
 }
+
+export type Roles = 'admin' | 'driver' | 'client'
 
 export interface PrivateRoutesProps {
 	children: ReactNode
