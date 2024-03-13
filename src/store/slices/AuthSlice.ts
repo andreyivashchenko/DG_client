@@ -1,13 +1,6 @@
 // authSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Roles } from '../../routes/privateRoutes'
-
-export interface IUser {
-	_id: string
-	name: string
-	email: string
-	role: Roles
-}
+import { IUser } from '../../types/User'
 
 export interface AuthResponse {
 	user: IUser

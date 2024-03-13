@@ -1,13 +1,13 @@
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
-import { useLoginMutation } from '../api/AuthService'
+import { useRegisterMutation } from '../api/AuthService'
 import { useAppDispatch } from '../hooks/useAppDispatch'
 import { useAppSelector } from '../hooks/useAppSelector'
 import { setUser } from '../store/slices/AuthSlice'
-import { UserCredentials } from '../types/User'
+import { UserRegister } from '../types/User'
 
-const LoginPage = () => {
-	const [login] = useLoginMutation()
+const RegisterPage = () => {
+	const [registerUser] = useRegisterMutation()
 	const dispatch = useAppDispatch()
 	const location = useLocation()
 	const navigate = useNavigate()
@@ -18,13 +18,13 @@ const LoginPage = () => {
 		register,
 		handleSubmit,
 		formState: { errors },
-	} = useForm<UserCredentials>()
-	const onSubmit: SubmitHandler<UserCredentials> = data => {
+	} = useForm<UserRegister>()
+	const onSubmit: SubmitHandler<UserRegister> = data => {
 		handleLogin(data)
 	}
-	const handleLogin = async (user: UserCredentials) => {
+	const handleLogin = async (user: UserRegister) => {
 		try {
-			const res = await login(user).unwrap()
+			const res = await registerUser(user).unwrap()
 			if (res) dispatch(setUser(res))
 			navigate(fromPage, { replace: true })
 		} catch (error) {
@@ -32,11 +32,9 @@ const LoginPage = () => {
 		}
 	}
 	if (isAuthenticated) return <Navigate to={'/'} />
-
 	return (
 		<div>
-			<span>Страница авторизации</span>
-
+			<span>Страница регистрации</span>
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<input
 					type='text'
@@ -56,10 +54,17 @@ const LoginPage = () => {
 					placeholder='Пароль'
 				/>
 				{errors.pass && <div>Это поле является обязательным</div>}
-				<button type='submit'>sign in</button>
+				<select {...register('role')} defaultValue={'driver'}>
+					<option value='admin'>admin</option>
+					<option value='client'>client</option>
+					<option value='driver'>driver</option>
+				</select>
+				{errors.pass && <div>Это поле является обязательным</div>}
+
+				<button type='submit'>sign up</button>
 			</form>
 		</div>
 	)
 }
 
-export default LoginPage
+export default RegisterPage

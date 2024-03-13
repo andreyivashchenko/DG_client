@@ -5,13 +5,19 @@ import DriverPage from '../pages/driverPage'
 import Layout from '../pages/layout'
 import LoginPage from '../pages/loginPage'
 import MainPage from '../pages/mainPage'
-import PrivateRoutes, { PrivateRoute, Roles } from './privateRoutes'
+import RegisterPage from '../pages/registerPage'
+import { PrivateRoute, Roles } from '../types/User'
+import PrivateRoutes from './privateRoutes'
 
 const AppRouter = () => {
 	const publicRoutes = [
 		{
 			path: '/login',
 			element: <LoginPage />,
+		},
+		{
+			path: '/register',
+			element: <RegisterPage />,
 		},
 	]
 	const privateRoutes: PrivateRoute[] = [
@@ -58,6 +64,16 @@ const AppRouter = () => {
 					)
 				)}
 			</Route>
+			<Route
+				path='*'
+				element={
+					<div>
+						Not Found
+						<br />
+						<Link to={'/'}>Вернуться на главную</Link>
+					</div>
+				}
+			/>
 		</Routes>
 	)
 }

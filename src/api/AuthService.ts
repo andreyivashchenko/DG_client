@@ -1,16 +1,11 @@
 // authApi.ts
 import { AuthResponse } from '../store/slices/AuthSlice'
+import { UserCredentials, UserRegister } from '../types/User'
 import { ApiService } from './ApiService'
-
-interface Credentials {
-	name: string
-	pass: string
-	email: string
-}
 
 export const authApi = ApiService.injectEndpoints({
 	endpoints: builder => ({
-		login: builder.mutation<AuthResponse, Credentials>({
+		login: builder.mutation<AuthResponse, UserCredentials>({
 			query: credentials => ({
 				url: '/auth/login',
 				method: 'POST',
@@ -21,7 +16,14 @@ export const authApi = ApiService.injectEndpoints({
 				return { error, message: 'err' }
 			},
 		}),
+		register: builder.mutation<AuthResponse, UserRegister>({
+			query: registerCredentials => ({
+				url: '/auth/register',
+				method: 'POST',
+				body: registerCredentials,
+			}),
+		}),
 	}),
 })
 
-export const { useLoginMutation } = authApi
+export const { useLoginMutation, useRegisterMutation } = authApi
