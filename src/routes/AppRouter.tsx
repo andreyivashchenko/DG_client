@@ -24,7 +24,7 @@ const AppRouter = () => {
 		{
 			path: '/main',
 			element: <MainPage />,
-			roles: ['admin', 'driver'],
+			roles: ['admin'],
 		},
 		{
 			path: '/driver',
@@ -48,13 +48,14 @@ const AppRouter = () => {
 		<Routes>
 			<Route path='/' element={<Layout />}>
 				{publicRoutes.map(route => (
-					<Route path={route.path} element={route.element} />
+					<Route path={route.path} element={route.element} key={route.path} />
 				))}
 				{privateRoutes.map(route =>
 					route.roles.includes(user?.role as Roles) ? (
 						<Route
 							path={route.path}
 							element={<PrivateRoutes>{route.element}</PrivateRoutes>}
+							key={route.path}
 						/>
 					) : (
 						<Route

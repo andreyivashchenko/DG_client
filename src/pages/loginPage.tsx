@@ -17,22 +17,30 @@ const LoginPage = () => {
 	const {
 		register,
 		handleSubmit,
+		setError,
 		formState: { errors },
+		clearErrors,
 	} = useForm<UserCredentials>()
 	const onSubmit: SubmitHandler<UserCredentials> = data => {
 		handleLogin(data)
 	}
 	const handleLogin = async (user: UserCredentials) => {
+		clearErrors('root')
 		try {
 			const res = await login(user).unwrap()
 			if (res) dispatch(setUser(res))
 			navigate(fromPage, { replace: true })
-		} catch (error) {
-			console.log(error)
+		} catch (error: any) {
+			if (error) {
+				setError('root.serverError', {
+					type: error.error.status,
+					message: error.error.data.message,
+				})
+			}
 		}
 	}
-	if (isAuthenticated) return <Navigate to={'/'} />
 
+	if (isAuthenticated) return <Navigate to={'/'} />
 	return (
 		<div>
 			<span>Страница авторизации</span>
@@ -57,6 +65,9 @@ const LoginPage = () => {
 				/>
 				{errors.pass && <div>Это поле является обязательным</div>}
 				<button type='submit'>sign in</button>
+				{errors.root && (
+					<div style={{ color: 'red' }}>{errors.root.serverError.message}</div>
+				)}
 			</form>
 		</div>
 	)
