@@ -7,7 +7,7 @@ const DriverPage = () => {
 	const navigate = useNavigate()
 	const handleLogout = () => {
 		dispatch(logout())
-		navigate('/')
+		navigate('/login')
 	}
 	return (
 		<div>

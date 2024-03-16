@@ -7,7 +7,7 @@ const ClientPage = () => {
 	const navigate = useNavigate()
 	const handleLogout = () => {
 		dispatch(logout())
-		navigate('/')
+		navigate('/login')
 	}
 	return (
 		<div>
