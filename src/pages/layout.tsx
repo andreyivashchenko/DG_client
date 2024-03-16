@@ -2,15 +2,15 @@ import { Link, Outlet } from 'react-router-dom'
 
 const Layout = () => {
 	return (
-		<div>
+		<div style={{ height: '100vh', color: 'white', padding: '20px' }}>
 			layout
-			<Outlet />
 			<br />
 			<Link to={'/main'}>main page</Link>
 			<br />
 			<Link to={'/driver'}>driver page</Link>
 			<br />
 			<Link to={'/client'}>client page</Link>
+			<Outlet />
 		</div>
 	)
 }
