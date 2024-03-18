@@ -1,10 +1,10 @@
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
-import { useRegisterMutation } from '../../../api/AuthService'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../hooks/useAppSelector'
-import { setUser } from '../../../store/slices/AuthSlice'
-import { UserRegister } from '../../../types/User'
+import { useRegisterMutation } from '../../api/AuthService'
+import { useAppDispatch } from '../../hooks/useAppDispatch'
+import { useAppSelector } from '../../hooks/useAppSelector'
+import { setUser } from '../../store/slices/AuthSlice'
+import { UserRegister } from '../../types/User'
 import classes from './registerPage.module.scss'
 
 const RegisterPage = () => {
