@@ -13,7 +13,7 @@ const driving = async (route: Route, updateDriverCoordinates: (newCoordinates: L
 
     for (let i = 0; i < routeCoordinates.length; i++) {
         updateDriverCoordinates(routeCoordinates[i]);
-        console.log(123);
+
         await new Promise((resolve) => setTimeout(resolve, 10));
     }
 };
