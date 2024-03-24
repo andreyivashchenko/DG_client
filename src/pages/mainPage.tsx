@@ -1,8 +1,10 @@
 import {useNavigate} from 'react-router-dom';
 import YMapLayout from '../components/ymapLayout';
 import {useAppDispatch} from '../hooks/useAppDispatch';
-import {YMapListener} from '../lib/ymaps';
+import {LngLat, YMapDefaultMarker, YMapListener} from '../lib/ymaps';
 
+import {useState} from 'react';
+import {useLazyGetMatrixQuery} from '../api/RouteService';
 import {logout} from '../store/slices/AuthSlice';
 
 const MainPage = () => {
@@ -13,25 +15,45 @@ const MainPage = () => {
         navigate('/login');
     };
 
-    const origins = [
-        [37.678994344467164, 55.77243026992315],
-        [37.70374942363269, 55.78088681812062]
-    ];
+    const [getMatrix] = useLazyGetMatrixQuery(undefined);
+    const [markers, setMarkers] = useState<LngLat[]>([]);
+    const [optimal, setOptimal] = useState<LngLat | []>([]);
 
-    const destinations = [
-        [37.6797439716393, 55.78931380873577],
-        [37.66602194864067, 55.77996489255626]
-    ];
+    const handlePoint = () => {
+        const fetchMatrix = async () => {
+            const matrixData = (
+                await getMatrix({
+                    origins: markers,
+                    destinations: markers
+                }).unwrap()
+            ).matrix;
+
+            setOptimal(matrixData.origin);
+        };
+
+        fetchMatrix();
+    };
 
     return (
         <div>
             Main Page
             <div style={{height: '500px', width: '500px'}}>
                 <YMapLayout>
-                    <YMapListener onFastClick={(e, eve) => console.log(eve.coordinates)} />
+                    <YMapListener onFastClick={(e, eve) => setMarkers([...markers, eve.coordinates])} />
+                    {markers.map((marker) => {
+                        return (
+                            <YMapDefaultMarker
+                                coordinates={marker}
+                                key={marker[0]}
+                                color={marker[0] === optimal[0] && marker[1] === optimal[1] ? '#3a82db' : '#f25'}
+                            />
+                        );
+                    })}
                 </YMapLayout>
             </div>
             <button onClick={handleLogout}>logout</button>
+            <br />
+            <button onClick={handlePoint}>Найти оптимальное расположение</button>
         </div>
     );
 };
