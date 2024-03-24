@@ -1,6 +1,14 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import type {LngLat, LngLatBounds, MapEventUpdateHandler, YMapProps, YMapLocationRequest} from '@yandex/ymaps3';
+import type {
+    LngLat,
+    LngLatBounds,
+    MapEventUpdateHandler,
+    YMapProps,
+    YMapLocationRequest,
+    DrawingStyle
+} from '@yandex/ymaps3';
+import type {Geometry} from '@yandex/ymaps3/imperative/YMapFeature/types';
 import * as ymaps3 from '@yandex/ymaps3';
 import {YMapLocation} from '@yandex/ymaps3/imperative/YMap';
 import {reactify} from '@yandex/ymaps3/reactify';
@@ -30,8 +38,17 @@ export {
     YMapDefaultSchemeLayer,
     YMapFeature,
     YMapListener,
-    YMapMarker as MapMarker,
+    YMapMarker,
     reactified
 };
 
-export type {YMapLocation, YMapLocationRequest, YMapProps, LngLat, LngLatBounds, MapEventUpdateHandler};
+export type {
+    YMapLocation,
+    YMapLocationRequest,
+    YMapProps,
+    LngLat,
+    LngLatBounds,
+    MapEventUpdateHandler,
+    DrawingStyle,
+    Geometry
+};
