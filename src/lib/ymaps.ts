@@ -11,6 +11,7 @@ import type {
 import type {Geometry} from '@yandex/ymaps3/imperative/YMapFeature/types';
 import * as ymaps3 from '@yandex/ymaps3';
 import {YMapLocation} from '@yandex/ymaps3/imperative/YMap';
+import * as YMapDefaultMarkerPrototype from '@yandex/ymaps3/packages/markers';
 import {reactify} from '@yandex/ymaps3/reactify';
 
 const reactified = reactify.bindTo(React, ReactDom);
@@ -27,6 +28,8 @@ const {
     YMapControl
 } = reactified.module(ymaps3);
 
+const {YMapDefaultMarker} = reactified.module(YMapDefaultMarkerPrototype);
+
 export {
     YMap,
     ymaps3 as map,
@@ -39,6 +42,7 @@ export {
     YMapFeature,
     YMapListener,
     YMapMarker,
+    YMapDefaultMarker,
     reactified
 };
 
