@@ -1,18 +1,18 @@
-import React from 'react';
-import ReactDom from 'react-dom';
 import type {
+    DrawingStyle,
     LngLat,
     LngLatBounds,
     MapEventUpdateHandler,
-    YMapProps,
     YMapLocationRequest,
-    DrawingStyle
+    YMapProps
 } from '@yandex/ymaps3';
-import type {Geometry} from '@yandex/ymaps3/imperative/YMapFeature/types';
 import * as ymaps3 from '@yandex/ymaps3';
 import {YMapLocation} from '@yandex/ymaps3/imperative/YMap';
+import type {Geometry} from '@yandex/ymaps3/imperative/YMapFeature/types';
 import * as YMapDefaultMarkerPrototype from '@yandex/ymaps3/packages/markers';
 import {reactify} from '@yandex/ymaps3/reactify';
+import React from 'react';
+import ReactDom from 'react-dom';
 
 const reactified = reactify.bindTo(React, ReactDom);
 const {
@@ -32,27 +32,26 @@ const {YMapDefaultMarker} = reactified.module(YMapDefaultMarkerPrototype);
 
 export {
     YMap,
-    ymaps3 as map,
     YMapContainer,
     YMapControl,
     YMapControlButton,
     YMapControls,
     YMapDefaultFeaturesLayer,
+    YMapDefaultMarker,
     YMapDefaultSchemeLayer,
     YMapFeature,
     YMapListener,
     YMapMarker,
-    YMapDefaultMarker,
     reactified
 };
 
 export type {
-    YMapLocation,
-    YMapLocationRequest,
-    YMapProps,
+    DrawingStyle,
+    Geometry,
     LngLat,
     LngLatBounds,
     MapEventUpdateHandler,
-    DrawingStyle,
-    Geometry
+    YMapLocation,
+    YMapLocationRequest,
+    YMapProps
 };

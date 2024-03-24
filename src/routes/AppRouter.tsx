@@ -29,7 +29,7 @@ const AppRouter = () => {
         {
             path: '/driver',
             element: <DriverPage />,
-            roles: ['driver']
+            roles: ['driver', 'admin']
         },
         {
             path: '/driver/test',

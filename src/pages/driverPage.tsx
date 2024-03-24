@@ -1,12 +1,13 @@
-import {useNavigate} from 'react-router-dom';
-import {useAppDispatch} from '../hooks/useAppDispatch';
-import {logout} from '../store/slices/AuthSlice';
 import {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {useLazyGetRouteQuery} from '../api/RouteService';
 import YMapLayout from '../components/ymapLayout';
+import {useAppDispatch} from '../hooks/useAppDispatch';
+import {logout} from '../store/slices/AuthSlice';
+
+import DriverRoute from '../components/DriverRoute';
 import {LngLat, YMapDefaultMarker} from '../lib/ymaps';
 import type {Route} from '../types/Map';
-import DriverRoute from '../components/DriverRoute';
 
 const driving = async (route: Route, updateDriverCoordinates: (newCoordinates: LngLat) => void) => {
     const routeCoordinates = route.points;
@@ -46,7 +47,9 @@ const DriverPage = () => {
         };
 
         fetchRoute();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
     return (
         <div>
             Driver Page
