@@ -3,9 +3,11 @@ import YMapLayout from '../components/ymapLayout';
 import {useAppDispatch} from '../hooks/useAppDispatch';
 import {LngLat, YMapDefaultMarker, YMapListener} from '../lib/ymaps';
 
-import {useState} from 'react';
-import {useLazyGetMatrixQuery} from '../api/RouteService';
+import {useEffect, useState} from 'react';
+import {useLazyGetMatrixQuery, useLazyGetRouteQuery} from '../api/RouteService';
+import DriverRoute from '../components/DriverRoute';
 import {logout} from '../store/slices/AuthSlice';
+import {MatrixData, Point, Route} from '../types/Map';
 
 const MainPage = () => {
     const dispatch = useAppDispatch();
@@ -16,8 +18,11 @@ const MainPage = () => {
     };
 
     const [getMatrix] = useLazyGetMatrixQuery(undefined);
+    const [getRoute] = useLazyGetRouteQuery(undefined);
     const [markers, setMarkers] = useState<LngLat[]>([]);
     const [optimal, setOptimal] = useState<LngLat | []>([]);
+    const [routes, setRoute] = useState<Route[]>([]);
+    const [matrixData, setMatrixData] = useState<MatrixData[]>([]);
 
     const handlePoint = () => {
         const fetchMatrix = async () => {
@@ -27,12 +32,33 @@ const MainPage = () => {
                     destinations: markers
                 }).unwrap()
             ).matrix;
-
+            console.log('matrixData', matrixData);
             setOptimal(matrixData.origin);
+            setMatrixData(matrixData.data);
         };
 
         fetchMatrix();
     };
+
+    const test = () => {
+        matrixData.map(async (route) => {
+            const data = await fetchRoute([route.origin, route.destination]);
+            setRoute([...routes, data]);
+        });
+    };
+
+    const fetchRoute = async (waypoints: Point[]) => {
+        const routeData = (
+            await getRoute({
+                waypoints: waypoints
+            }).unwrap()
+        ).route as Route;
+        return routeData;
+    };
+
+    useEffect(() => {
+        test();
+    }, [matrixData]);
 
     return (
         <div>
@@ -49,6 +75,11 @@ const MainPage = () => {
                             />
                         );
                     })}
+                    {routes &&
+                        routes.map((route) => {
+                            console.log(routes);
+                            return <DriverRoute route={route} key={route.distance} />;
+                        })}
                 </YMapLayout>
             </div>
             <button onClick={handleLogout}>logout</button>
