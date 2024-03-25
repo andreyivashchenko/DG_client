@@ -77,7 +77,6 @@ const MainPage = () => {
                     })}
                     {routes &&
                         routes.map((route) => {
-                            console.log(routes);
                             return <DriverRoute route={route} key={route.distance} />;
                         })}
                 </YMapLayout>
