@@ -4,7 +4,7 @@ import {useLazyGetRouteQuery} from '../api/RouteService';
 import YMapLayout from '../components/ymapLayout';
 import {useAppDispatch} from '../hooks/useAppDispatch';
 import {logout} from '../store/slices/AuthSlice';
-import DriverRoute from '../components/DriverRoute';
+import DriverRoute from '../components/driverRoute';
 import {LngLat, YMapDefaultMarker} from '../lib/ymaps';
 import type {Route} from '../types/Map';
 import {navigation} from '../utils/navigation';
