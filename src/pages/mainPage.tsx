@@ -32,7 +32,6 @@ const MainPage = () => {
                     destinations: markers
                 }).unwrap()
             ).matrix;
-            console.log('matrixData', matrixData);
             setOptimal(matrixData.origin);
             setMatrixData(matrixData.data);
         };

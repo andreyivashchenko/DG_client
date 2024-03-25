@@ -24,12 +24,12 @@ const AppRouter = () => {
         {
             path: '/main',
             element: <MainPage />,
-            roles: ['admin', 'driver']
+            roles: ['admin', 'driver', 'client']
         },
         {
             path: '/driver',
             element: <DriverPage />,
-            roles: ['driver', 'admin']
+            roles: ['admin', 'driver', 'client']
         },
         {
             path: '/driver/test',
@@ -39,7 +39,7 @@ const AppRouter = () => {
         {
             path: '/client',
             element: <ClientPage />,
-            roles: ['client']
+            roles: ['admin', 'driver', 'client']
         }
     ];
 
