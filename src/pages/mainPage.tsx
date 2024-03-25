@@ -40,7 +40,7 @@ const MainPage = () => {
         fetchMatrix();
     };
 
-    const test = () => {
+    const fetchMultiRoute = () => {
         matrixData.map(async (route) => {
             const data = await fetchRoute([route.origin, route.destination]);
             setRoute((prevRoutes) => [...prevRoutes, data]);
@@ -57,7 +57,9 @@ const MainPage = () => {
     };
 
     useEffect(() => {
-        test();
+        setRoute([]);
+        fetchMultiRoute();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [matrixData]);
 
     return (
@@ -77,7 +79,7 @@ const MainPage = () => {
                     })}
                     {routes &&
                         routes.map((route) => {
-                            return <DriverRoute route={route} key={route.distance} />;
+                            return <DriverRoute route={route} key={route.duration} />;
                         })}
                 </YMapLayout>
             </div>
