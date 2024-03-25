@@ -1,7 +1,13 @@
 // routeApi.ts
 import {LngLat} from '@yandex/ymaps3';
-import type {Point} from '../types/Map';
+import type {Matrix, Point} from '../types/Map';
 import {ApiService} from './ApiService';
+
+export interface MatrixResp {
+    success: boolean;
+    message: string;
+    matrix: Matrix;
+}
 
 export const routeApi = ApiService.injectEndpoints({
     endpoints: (builder) => ({
@@ -17,7 +23,7 @@ export const routeApi = ApiService.injectEndpoints({
                 };
             }
         }),
-        getMatrix: builder.query<any, {origins: LngLat[]; destinations: LngLat[]}>({
+        getMatrix: builder.query<MatrixResp, {origins: LngLat[]; destinations: LngLat[]}>({
             query: (arg) => {
                 const {origins, destinations} = arg;
                 const formatOrigins = JSON.stringify(origins);

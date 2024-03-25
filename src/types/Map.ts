@@ -7,3 +7,17 @@ export interface Route {
     duration: number;
     points: LngLat[];
 }
+
+export interface Matrix {
+    totalDuration: number;
+    origin: Point;
+    data: MatrixData[];
+}
+
+export interface MatrixData {
+    status: string;
+    distance: {value: number};
+    duration: {value: number};
+    destination: Point;
+    origin: Point;
+}
