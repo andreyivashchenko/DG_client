@@ -25,7 +25,7 @@ export const navigation = async (
             updateDriverCoordinates(coordinates);
 
             if (i % 10 === 0) {
-                // TODO: тут надо отправлять координаты драйвера на бэк
+                // TODO: тут надо отправлять координаты драйвера на бэк.
             }
 
             const distanceToEndRoute = findDistance(coordinates, routeCoordinates[routeCoordinates.length - 1]);
