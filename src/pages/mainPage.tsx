@@ -43,7 +43,7 @@ const MainPage = () => {
     const test = () => {
         matrixData.map(async (route) => {
             const data = await fetchRoute([route.origin, route.destination]);
-            setRoute([...routes, data]);
+            setRoute((prevRoutes) => [...prevRoutes, data]);
         });
     };
 
