@@ -24,7 +24,7 @@ const AppRouter = () => {
         {
             path: '/main',
             element: <MainPage />,
-            roles: ['admin']
+            roles: ['admin', 'driver']
         },
         {
             path: '/driver',

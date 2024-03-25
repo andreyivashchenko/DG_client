@@ -2,7 +2,8 @@ import {useMemo} from 'react';
 import {YMapFeature, YMapMarker} from '../../lib/ymaps';
 import type {LngLat} from '../../lib/ymaps';
 import type {Route} from '../../types/Map';
-import {getFeatureStyle, getFeatureGeometry, getFeatureCoordinates, findNearestIndex} from './utils';
+import {getFeatureStyle, getFeatureGeometry, getFeatureCoordinates} from './utils';
+import {findNearestIndex} from '../../utils/math';
 
 import classes from './index.module.scss';
 

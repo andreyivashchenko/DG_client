@@ -4,20 +4,10 @@ import {useLazyGetRouteQuery} from '../api/RouteService';
 import YMapLayout from '../components/ymapLayout';
 import {useAppDispatch} from '../hooks/useAppDispatch';
 import {logout} from '../store/slices/AuthSlice';
-
 import DriverRoute from '../components/DriverRoute';
 import {LngLat, YMapDefaultMarker} from '../lib/ymaps';
 import type {Route} from '../types/Map';
-
-const driving = async (route: Route, updateDriverCoordinates: (newCoordinates: LngLat) => void) => {
-    const routeCoordinates = route.points;
-
-    for (let i = 0; i < routeCoordinates.length; i++) {
-        updateDriverCoordinates(routeCoordinates[i]);
-
-        await new Promise((resolve) => setTimeout(resolve, 10));
-    }
-};
+import {navigation} from '../utils/navigation';
 
 const DriverPage = () => {
     const dispatch = useAppDispatch();
@@ -59,7 +49,7 @@ const DriverPage = () => {
                     <YMapDefaultMarker coordinates={[37.9, 55.85]} />
                 </YMapLayout>
             </div>
-            {route && <button onClick={() => driving(route, setDriverCoordinates)}>Start route</button>}
+            {route && <button onClick={() => navigation(route, setDriverCoordinates)}>Start route</button>}
             <br />
             <button onClick={handleLogout}>logout</button>
         </div>
