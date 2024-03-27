@@ -5,7 +5,7 @@ const Layout = () => {
         <div style={{height: '100vh', color: 'white', padding: '20px'}}>
             client layout
             <div style={{display: 'flex', gap: '0 15px', paddingBottom: '30px'}}>
-                <Link to={'/lol'}>client page</Link>
+                <Link to={'/client/edit-objects'}>Edit objects</Link>
             </div>
             <Outlet />
         </div>

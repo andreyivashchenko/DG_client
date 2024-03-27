@@ -2,6 +2,11 @@ import {ReactNode} from 'react';
 
 export type Roles = 'admin' | 'driver' | 'client';
 
+export interface RoutePathElement {
+    path: string;
+    element: JSX.Element;
+}
+
 export interface PrivateRoutesProps {
     children: ReactNode;
 }

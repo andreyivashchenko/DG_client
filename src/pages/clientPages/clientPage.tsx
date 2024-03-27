@@ -1,13 +1,13 @@
 import {useNavigate} from 'react-router-dom';
-import YMapLayout from '../components/ymapLayout';
-import {useAppDispatch} from '../hooks/useAppDispatch';
-import {LngLat, YMapDefaultMarker, YMapListener} from '../lib/ymaps';
+import YMapLayout from '../../components/ymapLayout';
+import {useAppDispatch} from '../../hooks/useAppDispatch';
+import {LngLat, YMapDefaultMarker, YMapListener} from '../../lib/ymaps';
 
 import {useEffect, useState} from 'react';
-import {useLazyGetMatrixQuery, useLazyGetRouteQuery} from '../api/RouteService';
-import DriverRoute from '../components/DriverRoute';
-import {logout} from '../store/slices/AuthSlice';
-import {MatrixData, Point, Route} from '../types/Map';
+import {useLazyGetMatrixQuery, useLazyGetRouteQuery} from '../../api/RouteService';
+import DriverRoute from '../../components/DriverRoute';
+import {logout} from '../../store/slices/AuthSlice';
+import {MatrixData, Point, Route} from '../../types/Map';
 
 const ClientPage = () => {
     const dispatch = useAppDispatch();
