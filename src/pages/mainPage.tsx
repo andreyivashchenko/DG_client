@@ -1,13 +1,12 @@
 import {useNavigate} from 'react-router-dom';
 import YMapLayout from '../components/ymapLayout';
 import {useAppDispatch} from '../hooks/useAppDispatch';
-import {LngLat, YMapDefaultMarker, YMapListener} from '../lib/ymaps';
+import {YMapDefaultMarker} from '../lib/ymaps';
 
 import {useEffect, useState} from 'react';
-import {useLazyGetMatrixQuery, useLazyGetRouteQuery} from '../api/RouteService';
-import DriverRoute from '../components/DriverRoute';
+import {useGetObjectsQuery, useSetObjectStatusMutation} from '../api/ObjectService';
 import {logout} from '../store/slices/AuthSlice';
-import {MatrixData, Point, Route} from '../types/Map';
+import {IObject, Status} from '../types/Object';
 
 const MainPage = () => {
     const dispatch = useAppDispatch();
@@ -16,75 +15,90 @@ const MainPage = () => {
         dispatch(logout());
         navigate('/login');
     };
-
-    const [getMatrix] = useLazyGetMatrixQuery(undefined);
-    const [getRoute] = useLazyGetRouteQuery(undefined);
-    const [markers, setMarkers] = useState<LngLat[]>([]);
-    const [optimal, setOptimal] = useState<LngLat | []>([]);
-    const [routes, setRoute] = useState<Route[]>([]);
-    const [matrixData, setMatrixData] = useState<MatrixData[]>([]);
-
-    const handlePoint = () => {
-        const fetchMatrix = async () => {
-            const matrixData = (
-                await getMatrix({
-                    origins: markers,
-                    destinations: markers
-                }).unwrap()
-            ).matrix;
-            setOptimal(matrixData.origin);
-            setMatrixData(matrixData.data);
-        };
-
-        fetchMatrix();
-    };
-
-    const fetchMultiRoute = () => {
-        matrixData.map(async (route) => {
-            const data = await fetchRoute([route.origin, route.destination]);
-            setRoute((prevRoutes) => [...prevRoutes, data]);
-        });
-    };
-
-    const fetchRoute = async (waypoints: Point[]) => {
-        const routeData = (
-            await getRoute({
-                waypoints: waypoints
-            }).unwrap()
-        ).route as Route;
-        return routeData;
-    };
+    const {data, isLoading} = useGetObjectsQuery('');
+    const [setObjectsStatus] = useSetObjectStatusMutation();
+    const [objects, setObjects] = useState<IObject[]>([]);
+    const [selectMarker, setSelectMarker] = useState<IObject | null>(null);
+    const Statuses: Status[] = ['working', 'waiting', 'repair'];
 
     useEffect(() => {
-        setRoute([]);
-        fetchMultiRoute();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [matrixData]);
+        setObjects([]);
+        if (!isLoading && data) {
+            data
+                ? data.data.map((client) =>
+                      client.groups.map((group) =>
+                          group.objects.map((object) => {
+                              return setObjects((prevObjects) => [...prevObjects, object]);
+                          })
+                      )
+                  )
+                : setObjects([]);
+        }
+    }, [data, isLoading]);
+
+    const handleClickMarker = (obj: IObject) => {
+        setSelectMarker(obj);
+    };
+    const handleSetObjectStatus = (selectMarker: IObject, status: Status) => {
+        setObjectsStatus({object_id: selectMarker.object_id, status: status});
+        setSelectMarker(null);
+    };
 
     return (
         <div>
             Main Page
             <div style={{height: '500px', width: '500px'}}>
                 <YMapLayout>
-                    <YMapListener onFastClick={(e, eve) => setMarkers([...markers, eve.coordinates])} />
-                    {markers.map((marker) => {
+                    {objects.map((obj) => {
                         return (
                             <YMapDefaultMarker
-                                coordinates={marker}
-                                key={marker[0]}
-                                color={marker[0] === optimal[0] && marker[1] === optimal[1] ? '#3a82db' : '#f25'}
+                                coordinates={obj.coordinates}
+                                key={obj.object_id}
+                                color={
+                                    obj.status === 'working'
+                                        ? '#15f001'
+                                        : obj.status === 'waiting'
+                                        ? '#fcff3c'
+                                        : '#ff0000'
+                                }
+                                onClick={() => handleClickMarker(obj)}
                             />
                         );
                     })}
-                    {routes &&
-                        routes.map((route) => {
-                            return <DriverRoute route={route} key={route.duration} />;
-                        })}
                 </YMapLayout>
             </div>
             <button onClick={handleLogout}>logout</button>
             <br />
-            <button onClick={handlePoint}>Найти оптимальное расположение</button>
+            <br />
+            {selectMarker ? (
+                <div>
+                    <span>Выбран объект с id : {selectMarker.object_id}</span>
+                    <br />
+                    <span>Текущее состояние объекта: {selectMarker.status}</span>
+                    <br />
+                    Можете задать ему следующие состояния:
+                    {Statuses.map((status) =>
+                        status !== selectMarker.status ? (
+                            <div key={status}>
+                                <br />
+                                <button
+                                    onClick={() => {
+                                        handleSetObjectStatus(selectMarker, status);
+                                    }}
+                                    style={{padding: '10px', cursor: 'pointer'}}
+                                >
+                                    {status}
+                                </button>
+                                <br />
+                            </div>
+                        ) : (
+                            ''
+                        )
+                    )}
+                </div>
+            ) : (
+                ''
+            )}
         </div>
     );
 };
