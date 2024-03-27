@@ -13,7 +13,7 @@ export const ObjectService = ApiService.injectEndpoints({
     endpoints: (builder) => ({
         getObjects: builder.query<IObjectsResp, any>({
             query: () => `${ObjectUrl}/`,
-            providesTags: ['Objects']
+            providesTags: ['/object']
         }),
         setObjectStatus: builder.mutation<{message: string}, {object_id: number; status: Status}>({
             query: (args) => {
@@ -24,7 +24,7 @@ export const ObjectService = ApiService.injectEndpoints({
                     body: {object_id, status}
                 };
             },
-            invalidatesTags: ['Objects']
+            invalidatesTags: ['/object']
         })
     })
 });

@@ -5,6 +5,6 @@ export const ApiService = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://localhost:4000/'
     }),
-    tagTypes: ['Objects'],
+    tagTypes: ['/object'],
     endpoints: () => ({})
 });

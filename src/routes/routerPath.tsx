@@ -2,7 +2,7 @@ import ClientPage from '../pages/clientPages/clientPage';
 import EditObjectsPage from '../pages/clientPages/editObjectsPage';
 import DriverPage from '../pages/driverPage';
 import LoginPage from '../pages/loginPage/loginPage';
-import MainPage from '../pages/mainPage';
+import MainPage from '../pages/mainPage/mainPage';
 import RegisterPage from '../pages/registerPage/registerPage';
 import type {RoutePathElement} from '../types/User';
 

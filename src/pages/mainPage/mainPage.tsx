@@ -1,12 +1,12 @@
 import {useNavigate} from 'react-router-dom';
-import YMapLayout from '../components/ymapLayout';
-import {useAppDispatch} from '../hooks/useAppDispatch';
-import {YMapDefaultMarker} from '../lib/ymaps';
+import YMapLayout from '../../components/ymapLayout';
+import {useAppDispatch} from '../../hooks/useAppDispatch';
+import {YMapDefaultMarker} from '../../lib/ymaps';
 
 import {useEffect, useState} from 'react';
-import {useGetObjectsQuery, useSetObjectStatusMutation} from '../api/ObjectService';
-import {logout} from '../store/slices/AuthSlice';
-import {IObject, Status} from '../types/Object';
+import {useGetObjectsQuery, useSetObjectStatusMutation} from '../../api/ObjectService';
+import {logout} from '../../store/slices/AuthSlice';
+import {IObject, Status} from '../../types/Object';
 
 const MainPage = () => {
     const dispatch = useAppDispatch();
@@ -24,15 +24,13 @@ const MainPage = () => {
     useEffect(() => {
         setObjects([]);
         if (!isLoading && data) {
-            data
-                ? data.data.map((client) =>
-                      client.groups.map((group) =>
-                          group.objects.map((object) => {
-                              return setObjects((prevObjects) => [...prevObjects, object]);
-                          })
-                      )
-                  )
-                : setObjects([]);
+            data.data.map((client) =>
+                client.groups.map((group) =>
+                    group.objects.map((object) => {
+                        return setObjects((prevObjects) => [...prevObjects, object]);
+                    })
+                )
+            );
         }
     }, [data, isLoading]);
 
