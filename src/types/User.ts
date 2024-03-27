@@ -1,25 +1,19 @@
-import { ReactNode } from 'react'
+import {ReactNode} from 'react';
 
-export interface PrivateRoute {
-	path: string
-	element: ReactNode
-	roles: Roles[]
-}
-
-export type Roles = 'admin' | 'driver' | 'client'
+export type Roles = 'admin' | 'driver' | 'client';
 
 export interface PrivateRoutesProps {
-	children: ReactNode
+    children: ReactNode;
 }
 export interface IUser {
-	_id: string
-	name: string
-	email: string
-	role: Roles
+    _id: string;
+    name: string;
+    email: string;
+    role: Roles;
 }
 export interface UserCredentials extends Omit<IUser, '_id' | 'role'> {
-	pass: string
+    pass: string;
 }
 export interface UserRegister extends UserCredentials {
-	role: Roles
+    role: Roles;
 }
