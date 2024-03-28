@@ -1,6 +1,6 @@
 import {LngLat} from '@yandex/ymaps3';
 
-export interface IGroups {
+export interface IGroup {
     object_group_id: number;
     objects: IObject[];
 }
