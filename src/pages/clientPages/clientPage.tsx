@@ -1,13 +1,12 @@
 import {useNavigate} from 'react-router-dom';
-import YMapLayout from '../../components/ymapLayout';
 import {useAppDispatch} from '../../hooks/useAppDispatch';
-import {LngLat, YMapDefaultMarker, YMapListener} from '../../lib/ymaps';
-
-import {useEffect, useState} from 'react';
-import {useLazyGetMatrixQuery, useLazyGetRouteQuery} from '../../api/RouteService';
-import DriverRoute from '../../components/DriverRoute';
 import {logout} from '../../store/slices/AuthSlice';
-import {MatrixData, Point, Route} from '../../types/Map';
+import {useLazyGetObjectsQuery} from '../../api/ObjectService';
+import {useGetClientByUserIdQuery} from '../../api/ClientService';
+import {useAppSelector} from '../../hooks/useAppSelector';
+import {useState, useEffect} from 'react';
+import {IGroup} from '../../types/Object';
+import ObjectGroupItem from '../../components/client/objectGroupItem';
 
 const ClientPage = () => {
     const dispatch = useAppDispatch();
@@ -17,74 +16,35 @@ const ClientPage = () => {
         navigate('/login');
     };
 
-    const [getMatrix] = useLazyGetMatrixQuery(undefined);
-    const [getRoute] = useLazyGetRouteQuery(undefined);
-    const [markers, setMarkers] = useState<LngLat[]>([]);
-    const [optimal, setOptimal] = useState<LngLat | []>([]);
-    const [routes, setRoute] = useState<Route[]>([]);
-    const [matrixData, setMatrixData] = useState<MatrixData[]>([]);
+    const [groups, setGroups] = useState<IGroup[]>([]);
 
-    const handlePoint = () => {
-        const fetchMatrix = async () => {
-            const matrixData = (
-                await getMatrix({
-                    origins: markers,
-                    destinations: markers
-                }).unwrap()
-            ).matrix;
-            setOptimal(matrixData.origin);
-            setMatrixData(matrixData.data);
-        };
+    const userId = useAppSelector((state) => state.auth.user?._id)!;
 
-        fetchMatrix();
-    };
+    const {data: clientId, isLoading} = useGetClientByUserIdQuery(+userId);
 
-    const fetchMultiRoute = () => {
-        matrixData.map(async (route) => {
-            const data = await fetchRoute([route.origin, route.destination]);
-            setRoute((prevRoutes) => [...prevRoutes, data]);
-        });
-    };
-
-    const fetchRoute = async (waypoints: Point[]) => {
-        const routeData = (
-            await getRoute({
-                waypoints: waypoints
-            }).unwrap()
-        ).route as Route;
-        return routeData;
-    };
+    const [getClientObjectGroup] = useLazyGetObjectsQuery();
 
     useEffect(() => {
-        setRoute([]);
-        fetchMultiRoute();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [matrixData]);
+        if (clientId) {
+            const fetchClientObjectGroup = async (clientId: number) => {
+                const data = await getClientObjectGroup(clientId).unwrap();
+                setGroups(data.data[0].groups);
+            };
+
+            fetchClientObjectGroup(clientId);
+        }
+    }, [clientId]);
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div>
-            Client Page
-            <div style={{height: '500px', width: '500px'}}>
-                <YMapLayout>
-                    <YMapListener onFastClick={(e, eve) => setMarkers([...markers, eve.coordinates])} />
-                    {markers.map((marker) => {
-                        return (
-                            <YMapDefaultMarker
-                                coordinates={marker}
-                                key={marker[0]}
-                                color={marker[0] === optimal[0] && marker[1] === optimal[1] ? '#3a82db' : '#f25'}
-                            />
-                        );
-                    })}
-                    {routes &&
-                        routes.map((route) => {
-                            return <DriverRoute route={route} key={route.duration} />;
-                        })}
-                </YMapLayout>
-            </div>
+            {groups.map((group) => (
+                <ObjectGroupItem key={group.object_group_id} group={group} />
+            ))}
             <button onClick={handleLogout}>logout</button>
-            <br />
-            <button onClick={handlePoint}>Найти оптимальное расположение</button>
         </div>
     );
 };

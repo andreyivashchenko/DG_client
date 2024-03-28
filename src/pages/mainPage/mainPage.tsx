@@ -15,7 +15,7 @@ const MainPage = () => {
         dispatch(logout());
         navigate('/login');
     };
-    const {data, isLoading} = useGetObjectsQuery('');
+    const {data, isLoading} = useGetObjectsQuery(undefined);
     const [setObjectsStatus] = useSetObjectStatusMutation();
     const [objects, setObjects] = useState<IObject[]>([]);
     const [selectMarker, setSelectMarker] = useState<IObject | null>(null);

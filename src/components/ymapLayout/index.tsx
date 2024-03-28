@@ -1,6 +1,7 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer} from '../../lib/ymaps';
-import type {YMapLocationRequest, YMapProps} from '../../lib/ymaps';
+import type {YMapProps} from '../../lib/ymaps';
+import {DEFAULT_LOCATION} from '../../utils/map';
 
 type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 
@@ -16,16 +17,11 @@ const defaultContext: MapContextType = {
 
 export const MapContext = React.createContext<MapContextType>(defaultContext);
 
-const LOCATION: YMapLocationRequest = {
-    center: [37.623082, 55.75254], // starting position [lng, lat]
-    zoom: 9 // starting zoom
-};
-
 function YMapLayout(props: React.PropsWithChildren<PartialBy<YMapProps, 'location'>>) {
     const {children, ...initialMapProps} = props;
 
     const [mapProps, setMapProps] = React.useState<YMapProps>({
-        location: LOCATION,
+        location: DEFAULT_LOCATION,
         ...initialMapProps
     });
 
