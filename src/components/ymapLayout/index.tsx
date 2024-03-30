@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer} from '../../lib/ymaps';
 import type {YMapProps} from '../../lib/ymaps';
 import {DEFAULT_LOCATION} from '../../utils/map';
@@ -24,6 +24,14 @@ function YMapLayout(props: React.PropsWithChildren<PartialBy<YMapProps, 'locatio
         location: DEFAULT_LOCATION,
         ...initialMapProps
     });
+
+    useEffect(() => {
+        setMapProps({
+            location: DEFAULT_LOCATION,
+            ...initialMapProps
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [...Object.values(initialMapProps)]);
 
     return (
         <MapContext.Provider value={{mapProps, setMapProps}}>

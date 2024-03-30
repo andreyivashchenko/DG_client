@@ -1,0 +1,34 @@
+.infoWindow {
+    display: flex;
+    gap: 0 10px;
+
+    align-items: center;
+
+    width: 350px;
+    padding: 15px;
+
+    position: relative;
+
+    border-radius: 15px;
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.infoIcon {
+    position: relative;
+    width: 30px;
+    height: 30px;
+
+    img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        object-fit: cover;
+    }
+}
+
+.infoText {
+    color: #000;
+    font-size: 16px;
+}
