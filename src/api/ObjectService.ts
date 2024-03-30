@@ -11,8 +11,16 @@ export interface IObjectsResp {
 
 export const ObjectService = ApiService.injectEndpoints({
     endpoints: (builder) => ({
-        getObjects: builder.query<IObjectsResp, any>({
-            query: () => `${ObjectUrl}/`,
+        getObjects: builder.query<IObjectsResp, number | undefined>({
+            query: (arg) =>
+                arg
+                    ? {
+                          url: `${ObjectUrl}/`,
+                          params: {client_id: arg}
+                      }
+                    : {
+                          url: `${ObjectUrl}/`
+                      },
             providesTags: ['/object']
         }),
         setObjectStatus: builder.mutation<{message: string}, {object_id: number; status: Status}>({
@@ -29,4 +37,4 @@ export const ObjectService = ApiService.injectEndpoints({
     })
 });
 
-export const {useSetObjectStatusMutation, useGetObjectsQuery} = ObjectService;
+export const {useSetObjectStatusMutation, useGetObjectsQuery, useLazyGetObjectsQuery} = ObjectService;

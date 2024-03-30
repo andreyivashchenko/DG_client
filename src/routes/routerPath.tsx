@@ -1,5 +1,4 @@
 import ClientPage from '../pages/clientPages/clientPage';
-import EditObjectsPage from '../pages/clientPages/editObjectsPage';
 import DriverPage from '../pages/driverPage';
 import LoginPage from '../pages/loginPage/loginPage';
 import MainPage from '../pages/mainPage/mainPage';
@@ -39,9 +38,5 @@ export const clientRoutes: RoutePathElement[] = [
     {
         path: '/client',
         element: <ClientPage />
-    },
-    {
-        path: '/client/edit-objects',
-        element: <EditObjectsPage />
     }
 ];
