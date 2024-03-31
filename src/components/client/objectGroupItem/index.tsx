@@ -1,10 +1,11 @@
 import React, {useMemo, useState} from 'react';
 import YMapLayout from '../../ymapLayout';
-import {YMapDefaultMarker, YMapControls} from '../../../lib/ymaps';
-import type {Margin, BehaviorType} from '../../../lib/ymaps';
-import type {IGroup} from '../../../types/Object';
+import {YMapDefaultMarker, YMapControls, YMapListener} from '../../../lib/ymaps';
+import type {Margin, BehaviorType, DomEventHandler, LngLat} from '../../../lib/ymaps';
+import type {IGroup, INewObject} from '../../../types/Object';
 import {DEFAULT_LOCATION, bbox} from '../../../utils/map';
 import MapInfoControl from '../mapInfoControl';
+import {useCreateObjectMutation} from '../../../api/ObjectService';
 
 const MAP_MARGIN = [75, 75, 75, 75] as Margin;
 const STATIC_MAP_BEHAVIORS: BehaviorType[] = [];
@@ -16,6 +17,9 @@ interface ObjectGroupItemProps {
 
 function ObjectGroupItem({group}: ObjectGroupItemProps) {
     const [isChangeObjects, setIsChangeObjects] = useState(false);
+    const [unsavedNewObjects, setUnsavedNewObjects] = useState<INewObject[]>([]);
+
+    const [createObject] = useCreateObjectMutation();
 
     const mapLocation = useMemo(
         () => {
@@ -38,7 +42,21 @@ function ObjectGroupItem({group}: ObjectGroupItemProps) {
         []
     );
 
+    const onMapClickHandler: DomEventHandler = (_, event) => {
+        if (!isChangeObjects) {
+            return;
+        }
+
+        setUnsavedNewObjects((prev) => [...prev, {coordinates: event.coordinates}]);
+    };
+
     const onClickHandler = () => {
+        if (isChangeObjects) {
+            unsavedNewObjects.forEach((unsavedNewObject) => {
+                createObject({coordinates: unsavedNewObject.coordinates, object_group_id: group.object_group_id});
+            });
+        }
+
         setIsChangeObjects(!isChangeObjects);
     };
 
@@ -54,6 +72,12 @@ function ObjectGroupItem({group}: ObjectGroupItemProps) {
                     {group.objects.map((object) => (
                         <YMapDefaultMarker key={object.object_id} coordinates={object.coordinates} />
                     ))}
+
+                    {unsavedNewObjects.map((unsavedNewObject, index) => (
+                        <YMapDefaultMarker key={index} coordinates={unsavedNewObject.coordinates} />
+                    ))}
+
+                    <YMapListener onClick={onMapClickHandler} />
 
                     {isChangeObjects && (
                         <YMapControls position="top left">

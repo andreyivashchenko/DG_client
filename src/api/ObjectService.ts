@@ -1,3 +1,4 @@
+import {LngLat} from '../lib/ymaps';
 import {IClientWithGroups} from '../types/Client';
 import {Status} from '../types/Object';
 import {ApiService} from './ApiService';
@@ -23,6 +24,17 @@ export const ObjectService = ApiService.injectEndpoints({
                       },
             providesTags: ['/object']
         }),
+        createObject: builder.mutation<{message: string}, {coordinates: LngLat; object_group_id: number}>({
+            query: (args) => {
+                const {coordinates, object_group_id} = args;
+
+                return {
+                    method: 'POST',
+                    url: `${ObjectUrl}/`,
+                    body: {coordinates, object_group_id}
+                };
+            }
+        }),
         setObjectStatus: builder.mutation<{message: string}, {object_id: number; status: Status}>({
             query: (args) => {
                 const {object_id, status} = args;
@@ -37,4 +49,5 @@ export const ObjectService = ApiService.injectEndpoints({
     })
 });
 
-export const {useSetObjectStatusMutation, useGetObjectsQuery, useLazyGetObjectsQuery} = ObjectService;
+export const {useSetObjectStatusMutation, useCreateObjectMutation, useGetObjectsQuery, useLazyGetObjectsQuery} =
+    ObjectService;
