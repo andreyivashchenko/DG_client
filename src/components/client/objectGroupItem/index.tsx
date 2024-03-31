@@ -1,17 +1,22 @@
-import React, {useMemo} from 'react';
+import React, {useMemo, useState} from 'react';
 import YMapLayout from '../../ymapLayout';
-import {YMapDefaultMarker} from '../../../lib/ymaps';
-import type {Margin} from '../../../lib/ymaps';
+import {YMapDefaultMarker, YMapControls} from '../../../lib/ymaps';
+import type {Margin, BehaviorType} from '../../../lib/ymaps';
 import type {IGroup} from '../../../types/Object';
 import {DEFAULT_LOCATION, bbox} from '../../../utils/map';
+import MapInfoControl from '../mapInfoControl';
+
+const MAP_MARGIN = [75, 75, 75, 75] as Margin;
+const STATIC_MAP_BEHAVIORS: BehaviorType[] = [];
+const RESPONSIVE_MAP_BEHAVIORS: BehaviorType[] = ['drag', 'scrollZoom', 'pinchZoom', 'dblClick'];
 
 interface ObjectGroupItemProps {
     group: IGroup;
 }
 
-const MAP_MARGIN = [75, 75, 75, 75] as Margin;
-
 function ObjectGroupItem({group}: ObjectGroupItemProps) {
+    const [isChangeObjects, setIsChangeObjects] = useState(false);
+
     const mapLocation = useMemo(
         () => {
             if (group.objects.length === 0) {
@@ -32,18 +37,33 @@ function ObjectGroupItem({group}: ObjectGroupItemProps) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         []
     );
+
+    const onClickHandler = () => {
+        setIsChangeObjects(!isChangeObjects);
+    };
+
     return (
         <div>
             <div>Группа #{group.object_group_id}</div>
-            <div style={{width: '300px', height: '300px'}}>
-                <YMapLayout location={mapLocation} behaviors={[]} margin={MAP_MARGIN}>
+            <div style={{width: '50%', height: '350px'}}>
+                <YMapLayout
+                    location={mapLocation}
+                    behaviors={isChangeObjects ? RESPONSIVE_MAP_BEHAVIORS : STATIC_MAP_BEHAVIORS}
+                    margin={MAP_MARGIN}
+                >
                     {group.objects.map((object) => (
                         <YMapDefaultMarker key={object.object_id} coordinates={object.coordinates} />
                     ))}
+
+                    {isChangeObjects && (
+                        <YMapControls position="top left">
+                            <MapInfoControl text="Чтобы добавить объект - кликните на нужное место на карте. Чтобы удалить объект - кликните на него. Максимум 10 объектов." />
+                        </YMapControls>
+                    )}
                 </YMapLayout>
             </div>
 
-            <button>Изменить объекты</button>
+            <button onClick={onClickHandler}>{isChangeObjects ? 'Сохранить изменения' : 'Изменить объекты'}</button>
         </div>
     );
 }

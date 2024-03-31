@@ -5,7 +5,8 @@ import type {
     MapEventUpdateHandler,
     YMapLocationRequest,
     YMapProps,
-    Margin
+    Margin,
+    BehaviorType
 } from '@yandex/ymaps3';
 import * as ymaps3 from '@yandex/ymaps3';
 import {YMapLocation} from '@yandex/ymaps3/imperative/YMap';
@@ -55,5 +56,6 @@ export type {
     YMapLocation,
     YMapLocationRequest,
     YMapProps,
-    Margin
+    Margin,
+    BehaviorType
 };
