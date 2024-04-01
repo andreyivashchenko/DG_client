@@ -33,7 +33,17 @@ export const ObjectService = ApiService.injectEndpoints({
                     url: `${ObjectUrl}/`,
                     body: {coordinates, object_group_id}
                 };
-            }
+            },
+            invalidatesTags: ['/object']
+        }),
+        deleteObjectById: builder.mutation<{message: string}, number>({
+            query: (args) => {
+                return {
+                    method: 'DELETE',
+                    url: `${ObjectUrl}/${args}`
+                };
+            },
+            invalidatesTags: ['/object']
         }),
         setObjectStatus: builder.mutation<{message: string}, {object_id: number; status: Status}>({
             query: (args) => {
@@ -49,5 +59,5 @@ export const ObjectService = ApiService.injectEndpoints({
     })
 });
 
-export const {useSetObjectStatusMutation, useCreateObjectMutation, useGetObjectsQuery, useLazyGetObjectsQuery} =
+export const {useSetObjectStatusMutation, useCreateObjectMutation, useGetObjectsQuery, useDeleteObjectByIdMutation} =
     ObjectService;

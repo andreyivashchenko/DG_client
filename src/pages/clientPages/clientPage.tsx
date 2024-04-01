@@ -1,8 +1,7 @@
 import {useNavigate} from 'react-router-dom';
 import {useAppDispatch} from '../../hooks/useAppDispatch';
 import {logout} from '../../store/slices/AuthSlice';
-import {useLazyGetObjectsQuery} from '../../api/ObjectService';
-import {useGetClientByUserIdQuery} from '../../api/ClientService';
+import {useGetObjectsQuery} from '../../api/ObjectService';
 import {useAppSelector} from '../../hooks/useAppSelector';
 import {useState, useEffect} from 'react';
 import {IGroup} from '../../types/Object';
@@ -18,22 +17,15 @@ const ClientPage = () => {
 
     const [groups, setGroups] = useState<IGroup[]>([]);
 
-    const userId = useAppSelector((state) => state.auth.user?._id)!;
+    const clientId = useAppSelector((state) => state.auth.roleId)!;
 
-    const {data: clientId, isLoading} = useGetClientByUserIdQuery(+userId);
-
-    const [getClientObjectGroup] = useLazyGetObjectsQuery();
+    const {data, isLoading} = useGetObjectsQuery(clientId);
 
     useEffect(() => {
-        if (clientId) {
-            const fetchClientObjectGroup = async (clientId: number) => {
-                const data = await getClientObjectGroup(clientId).unwrap();
-                setGroups(data.data[0].groups);
-            };
-
-            fetchClientObjectGroup(clientId);
+        if (data) {
+            setGroups(data.data[0].groups);
         }
-    }, [clientId]);
+    }, [isLoading, data]);
 
     if (isLoading) {
         return <div>Loading...</div>;
