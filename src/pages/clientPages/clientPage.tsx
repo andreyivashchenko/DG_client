@@ -1,11 +1,11 @@
 import {useNavigate} from 'react-router-dom';
 import {useAppDispatch} from '../../hooks/useAppDispatch';
 import {logout} from '../../store/slices/AuthSlice';
-import {useGetObjectsQuery} from '../../api/ObjectService';
 import {useAppSelector} from '../../hooks/useAppSelector';
 import {useState, useEffect} from 'react';
-import {IGroup} from '../../types/Object';
 import ObjectGroupItem from '../../components/client/objectGroupItem';
+import {IObjectGroup} from '../../types/ObjectGroup';
+import {useGetObjectGroupsByClientIdQuery} from '../../api/ObjectGroupService';
 
 const ClientPage = () => {
     const dispatch = useAppDispatch();
@@ -15,15 +15,15 @@ const ClientPage = () => {
         navigate('/login');
     };
 
-    const [groups, setGroups] = useState<IGroup[]>([]);
+    const [groups, setGroups] = useState<IObjectGroup[]>([]);
 
     const clientId = useAppSelector((state) => state.auth.roleId)!;
 
-    const {data, isLoading} = useGetObjectsQuery(clientId);
+    const {data, isLoading} = useGetObjectGroupsByClientIdQuery(clientId);
 
     useEffect(() => {
         if (data) {
-            setGroups(data.data[0].groups);
+            setGroups(data.data);
         }
     }, [isLoading, data]);
 

@@ -4,7 +4,8 @@ import {useAppDispatch} from '../../hooks/useAppDispatch';
 import {LngLat, YMapDefaultMarker} from '../../lib/ymaps';
 
 import {useEffect, useState} from 'react';
-import {useGetObjectsQuery, useSetObjectStatusMutation} from '../../api/ObjectService';
+import {useSetObjectStatusMutation} from '../../api/AdminService';
+import {useGetInfoQuery} from '../../api/AdminService';
 import {useLazyGetRouteQuery} from '../../api/RouteService';
 import DriverRoute from '../../components/DriverRoute';
 import {logout} from '../../store/slices/AuthSlice';
@@ -18,7 +19,7 @@ const MainPage = () => {
         dispatch(logout());
         navigate('/login');
     };
-    const {data, isLoading} = useGetObjectsQuery(undefined);
+    const {data, isLoading} = useGetInfoQuery(undefined);
     const [setObjectsStatus] = useSetObjectStatusMutation();
     const [objects, setObjects] = useState<IObject[]>([]);
     const [selectMarker, setSelectMarker] = useState<IObject | null>(null);

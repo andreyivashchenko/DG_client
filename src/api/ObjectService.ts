@@ -1,5 +1,5 @@
 import {LngLat} from '../lib/ymaps';
-import {IClientWithGroups} from '../types/Client';
+import {IObject} from '../types/Object';
 import {Status} from '../types/Object';
 import {ApiService} from './ApiService';
 
@@ -7,21 +7,15 @@ const ObjectUrl = '/object';
 
 export interface IObjectsResp {
     message: string;
-    data: IClientWithGroups[];
+    data: IObject[];
 }
 
 export const ObjectService = ApiService.injectEndpoints({
     endpoints: (builder) => ({
-        getObjects: builder.query<IObjectsResp, number | undefined>({
-            query: (arg) =>
-                arg
-                    ? {
-                          url: `${ObjectUrl}/`,
-                          params: {client_id: arg}
-                      }
-                    : {
-                          url: `${ObjectUrl}/`
-                      },
+        getObjectsByObjectGroupId: builder.query<IObjectsResp, number>({
+            query: (arg) => ({
+                url: `${ObjectUrl}/${arg}`
+            }),
             providesTags: ['/object']
         }),
         createObject: builder.mutation<{message: string}, {coordinates: LngLat; object_group_id: number}>({
@@ -44,20 +38,8 @@ export const ObjectService = ApiService.injectEndpoints({
                 };
             },
             invalidatesTags: ['/object']
-        }),
-        setObjectStatus: builder.mutation<{message: string}, {object_id: number; status: Status}>({
-            query: (args) => {
-                const {object_id, status} = args;
-                return {
-                    url: `${ObjectUrl}/status`,
-                    method: 'POST',
-                    body: {object_id, status}
-                };
-            },
-            invalidatesTags: ['/object']
         })
     })
 });
 
-export const {useSetObjectStatusMutation, useCreateObjectMutation, useGetObjectsQuery, useDeleteObjectByIdMutation} =
-    ObjectService;
+export const {useCreateObjectMutation, useGetObjectsByObjectGroupIdQuery, useDeleteObjectByIdMutation} = ObjectService;
