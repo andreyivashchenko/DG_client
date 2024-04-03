@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useLazyGetRouteQuery} from '../api/RouteService';
 import DriverRoute from '../components/DriverRoute';
-import YMapLayout from '../components/ymapLayout';
+import MapLayout from '../components/mapLayout';
 import {useAppDispatch} from '../hooks/useAppDispatch';
 import {LngLat, YMapDefaultMarker} from '../lib/ymaps';
 import {logout} from '../store/slices/AuthSlice';
@@ -43,10 +43,10 @@ const DriverPage = () => {
         <div>
             Driver Page
             <div style={{width: '500px', height: '500px'}}>
-                <YMapLayout>
+                <MapLayout>
                     {route && <DriverRoute route={route} driverCoordinates={driverCoordinates} />}
                     <YMapDefaultMarker coordinates={[37.9, 55.85]} />
-                </YMapLayout>
+                </MapLayout>
             </div>
             {route && <button onClick={() => navigation(route, setDriverCoordinates, 1)}>Start route</button>}
             <br />

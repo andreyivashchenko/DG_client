@@ -1,0 +1,38 @@
+.object-point {
+    width: 35px;
+    height: 35px;
+
+    padding: 3px;
+
+    position: relative;
+    transform: translate(-50%, -50%);
+
+    background-color: #fff;
+
+    border: 5px solid;
+    border-radius: 50%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.working {
+    border-color: #40ec00;
+}
+
+.waiting {
+    border-color: #fc0200;
+}
+
+.repair {
+    border-color: #ffff00;
+}
+
+.new {
+    border-color: #0247fe;
+}
+
+.optimal {
+    background-color: #3c83ff;
+}

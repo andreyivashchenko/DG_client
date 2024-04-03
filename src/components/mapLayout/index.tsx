@@ -17,7 +17,7 @@ const defaultContext: MapContextType = {
 
 export const MapContext = React.createContext<MapContextType>(defaultContext);
 
-function YMapLayout(props: React.PropsWithChildren<PartialBy<YMapProps, 'location'>>) {
+function MapLayout(props: React.PropsWithChildren<PartialBy<YMapProps, 'location'>>) {
     const {children, ...initialMapProps} = props;
 
     const [mapProps, setMapProps] = React.useState<YMapProps>({
@@ -44,4 +44,4 @@ function YMapLayout(props: React.PropsWithChildren<PartialBy<YMapProps, 'locatio
     );
 }
 
-export default YMapLayout;
+export default MapLayout;

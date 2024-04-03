@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import YMapLayout from '../../ymapLayout';
-import {YMapDefaultMarker, YMapControls, YMapListener} from '../../../lib/ymaps';
+import MapLayout from '../../mapLayout';
+import {YMapControls, YMapListener} from '../../../lib/ymaps';
 import type {Margin, BehaviorType, DomEventHandler, YMapLocationRequest} from '../../../lib/ymaps';
 import type {INewObject, IObject} from '../../../types/Object';
 import type {IObjectGroup} from '../../../types/ObjectGroup';
@@ -12,6 +12,7 @@ import {
     useGetObjectsByObjectGroupIdQuery
 } from '../../../api/ObjectService';
 import {useDeleteObjectGroupByIdMutation} from '../../../api/ObjectGroupService';
+import MapObjectMarker from '../../mapObjectMarker';
 
 const MAP_MARGIN = [75, 75, 75, 75] as Margin;
 const STATIC_MAP_BEHAVIORS: BehaviorType[] = [];
@@ -112,7 +113,7 @@ function ObjectGroupItem({group}: ObjectGroupItemProps) {
         <div>
             <div>Группа #{group.object_group_id}</div>
             <div style={{width: '50%', height: '350px'}}>
-                <YMapLayout
+                <MapLayout
                     location={mapLocation}
                     behaviors={isChangeObjects ? RESPONSIVE_MAP_BEHAVIORS : STATIC_MAP_BEHAVIORS}
                     margin={MAP_MARGIN}
@@ -120,19 +121,20 @@ function ObjectGroupItem({group}: ObjectGroupItemProps) {
                     <YMapListener onClick={onMapClickHandler} />
 
                     {objects.map((object) => (
-                        <YMapDefaultMarker
+                        <MapObjectMarker
                             key={object.object_id}
                             coordinates={object.coordinates}
                             onClick={() => onClickObjectHandler(object.object_id)}
+                            status={object.status}
                         />
                     ))}
 
                     {unsavedObjects.map((unsavedObject, index) => (
-                        <YMapDefaultMarker
+                        <MapObjectMarker
                             key={index}
                             coordinates={unsavedObject.coordinates}
-                            color="#FFFF00"
                             onClick={() => onClickUnsavedObjectsHandler(unsavedObject)}
+                            status="new"
                         />
                     ))}
 
@@ -141,7 +143,7 @@ function ObjectGroupItem({group}: ObjectGroupItemProps) {
                             <MapInfoControl text="Чтобы добавить объект - кликните на нужное место на карте. Чтобы удалить объект - кликните на него. Максимум 10 объектов." />
                         </YMapControls>
                     )}
-                </YMapLayout>
+                </MapLayout>
             </div>
 
             <button onClick={() => onClickChangeMapBtnHandler(isChangeObjects, unsavedObjects)}>

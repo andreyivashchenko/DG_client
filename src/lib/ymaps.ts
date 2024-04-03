@@ -7,7 +7,8 @@ import type {
     YMapProps,
     Margin,
     BehaviorType,
-    DomEventHandler
+    DomEventHandler,
+    YMapMarkerProps
 } from '@yandex/ymaps3';
 import * as ymaps3 from '@yandex/ymaps3';
 import {YMapLocation} from '@yandex/ymaps3/imperative/YMap';
@@ -59,5 +60,6 @@ export type {
     YMapProps,
     Margin,
     BehaviorType,
-    DomEventHandler
+    DomEventHandler,
+    YMapMarkerProps
 };

@@ -1,8 +1,8 @@
 import {useNavigate} from 'react-router-dom';
-import YMapLayout from '../../components/ymapLayout';
+import MapLayout from '../../components/mapLayout';
 import {useAppDispatch} from '../../hooks/useAppDispatch';
 import {LngLat, YMapDefaultMarker} from '../../lib/ymaps';
-
+import MapObjectMarker from '../../components/mapObjectMarker';
 import {useEffect, useState} from 'react';
 import {useSetObjectStatusMutation} from '../../api/AdminService';
 import {useGetInfoQuery} from '../../api/AdminService';
@@ -89,26 +89,19 @@ const MainPage = () => {
         <div>
             Main Page
             <div style={{height: '500px', width: '500px'}}>
-                <YMapLayout>
+                <MapLayout>
                     {route && <DriverRoute route={route} driverCoordinates={driverCoordinates} />}
-                    <YMapDefaultMarker coordinates={[37.9, 55.85]} />
                     {objects.map((obj) => {
                         return (
-                            <YMapDefaultMarker
+                            <MapObjectMarker
                                 coordinates={obj.coordinates}
                                 key={obj.object_id}
-                                color={
-                                    obj.status === 'working'
-                                        ? '#15f001'
-                                        : obj.status === 'waiting'
-                                        ? '#fcff3c'
-                                        : '#ff0000'
-                                }
+                                status={obj.status}
                                 onClick={() => handleClickMarker(obj)}
                             />
                         );
                     })}
-                </YMapLayout>
+                </MapLayout>
             </div>
             <button onClick={handleLogout}>logout</button>
             <br />
