@@ -22,3 +22,11 @@ export interface UserCredentials extends Omit<IUser, '_id' | 'role'> {
 export interface UserRegister extends UserCredentials {
     role: Roles;
 }
+export interface IClientRegister extends Omit<UserRegister, 'name'> {
+    nameOrg: string;
+}
+export interface IDriverRegister extends IClientRegister {
+    fullName: string;
+    nameOrg: string;
+}
+export interface IAdminRegister extends UserRegister {}

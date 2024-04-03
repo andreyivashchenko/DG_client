@@ -1,9 +1,8 @@
 import {Link, Route, Routes} from 'react-router-dom';
+import ClientLayout from '../components/client/layout';
 import {useAppSelector} from '../hooks/useAppSelector';
 import Layout from '../pages/layout';
-import ClientLayout from '../components/client/layout';
-import {publicRoutes, adminRoutes, driverRoutes, clientRoutes} from './routerPath';
-import type {Roles} from '../types/User';
+import {adminRoutes, clientRoutes, driverRoutes, publicRoutes} from './routerPath';
 
 const AppRouter = () => {
     const {user} = useAppSelector((store) => store.auth);
