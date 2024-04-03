@@ -11,6 +11,7 @@ import {
     useDeleteObjectByIdMutation,
     useGetObjectsByObjectGroupIdQuery
 } from '../../../api/ObjectService';
+import {useDeleteObjectGroupByIdMutation} from '../../../api/ObjectGroupService';
 
 const MAP_MARGIN = [75, 75, 75, 75] as Margin;
 const STATIC_MAP_BEHAVIORS: BehaviorType[] = [];
@@ -30,6 +31,8 @@ function ObjectGroupItem({group}: ObjectGroupItemProps) {
     const [mapLocation, setMapLocation] = useState<YMapLocationRequest>(DEFAULT_LOCATION);
 
     const {data, isLoading} = useGetObjectsByObjectGroupIdQuery(group.object_group_id);
+
+    const [deleteObjectGroup] = useDeleteObjectGroupByIdMutation();
 
     useEffect(() => {
         if (data) {
@@ -96,6 +99,11 @@ function ObjectGroupItem({group}: ObjectGroupItemProps) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const onClickDeleteObjectGroupHandler = useCallback((objectGroupId: number) => {
+        deleteObjectGroup(objectGroupId);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     if (isLoading) {
         return <div>Loading object group</div>;
     }
@@ -139,6 +147,8 @@ function ObjectGroupItem({group}: ObjectGroupItemProps) {
             <button onClick={() => onClickChangeMapBtnHandler(isChangeObjects, unsavedObjects)}>
                 {isChangeObjects ? 'Сохранить изменения' : 'Изменить объекты'}
             </button>
+            <br />
+            <button onClick={() => onClickDeleteObjectGroupHandler(group.object_group_id)}>Удалить группу</button>
         </div>
     );
 }

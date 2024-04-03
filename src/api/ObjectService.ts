@@ -1,6 +1,5 @@
 import {LngLat} from '../lib/ymaps';
 import {IObject} from '../types/Object';
-import {Status} from '../types/Object';
 import {ApiService} from './ApiService';
 
 const ObjectUrl = '/object';
