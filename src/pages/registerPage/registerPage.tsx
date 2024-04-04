@@ -32,7 +32,8 @@ const RegisterPage = () => {
             nameOrg: '',
             role: 'client',
             email: '',
-            pass: ''
+            pass: '',
+            client_id: 0
         };
         if (data.role === 'client') {
             dataToFetch['nameOrg'] = data.nameOrg;
@@ -45,7 +46,8 @@ const RegisterPage = () => {
         dataToFetch['email'] = data.email;
         dataToFetch['pass'] = data.pass;
         dataToFetch['role'] = data.role;
-        handleRegister(data);
+        // handleRegister(data);
+        console.log(data);
     };
     const handleRegister = async (user: RegisterFrom) => {
         try {
