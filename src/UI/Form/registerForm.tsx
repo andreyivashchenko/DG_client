@@ -1,5 +1,6 @@
-import {FC, useState} from 'react';
-import {FieldErrors, UseFormRegister, UseFormReset} from 'react-hook-form';
+import {FC, useEffect, useState} from 'react';
+import {FieldErrors, UseFormRegister, UseFormReset, UseFormSetValue} from 'react-hook-form';
+import {useLazyGetClientsQuery} from '../../api/ClientService';
 import {RegisterFrom} from '../../pages/registerPage/registerPage';
 import {Roles} from '../../types/User';
 
@@ -10,10 +11,23 @@ interface RegisterFormProps {
     };
     errors: FieldErrors<RegisterFrom>;
     reset: UseFormReset<RegisterFrom>;
+    setValue: UseFormSetValue<RegisterFrom>;
 }
 
-export const RegisterForm: FC<RegisterFormProps> = ({register, classes, errors, reset}) => {
+export const RegisterForm: FC<RegisterFormProps> = ({register, classes, errors, reset, setValue}) => {
     const [role, setRole] = useState<Roles>('driver');
+    const [clients, setClients] = useState();
+    const [getClients] = useLazyGetClientsQuery();
+    useEffect(() => {
+        const fetchClients = async () => {
+            const fetchedClients = await getClients('');
+            setClients(fetchedClients.data.data);
+        };
+
+        if (role === 'driver') {
+            fetchClients();
+        }
+    }, [role]);
     const selectForm = () => {
         switch (role) {
             case 'client':

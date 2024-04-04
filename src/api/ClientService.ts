@@ -13,8 +13,12 @@ export const ClientService = ApiService.injectEndpoints({
                 url: `${ClientUrl}/${arg}`
             }),
             providesTags: ['/client/id']
+        }),
+        getClients: builder.query({
+            query: () => `${ClientUrl}/`,
+            providesTags: ['/client/']
         })
     })
 });
 
-export const {useGetClientByUserIdQuery} = ClientService;
+export const {useGetClientByUserIdQuery, useLazyGetClientsQuery} = ClientService;

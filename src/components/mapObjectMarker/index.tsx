@@ -1,8 +1,8 @@
 import clsx from 'clsx';
-import {YMapMarker} from '../../lib/ymaps';
-import type {YMapMarkerProps} from '../../lib/ymaps';
-import type {Status} from '../../types/Object';
 import {ReactComponent as ObjectIcon} from '../../img/object-icon.svg';
+import type {YMapMarkerProps} from '../../lib/ymaps';
+import {YMapMarker} from '../../lib/ymaps';
+import type {Status} from '../../types/Object';
 
 import classes from './index.module.scss';
 

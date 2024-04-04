@@ -22,7 +22,8 @@ const RegisterPage = () => {
         handleSubmit,
         formState: {errors},
         setError,
-        reset
+        reset,
+        setValue
     } = useForm<RegisterFrom>();
     const onSubmit: SubmitHandler<RegisterFrom> = (data) => {
         let dataToFetch: RegisterFrom = {
@@ -71,7 +72,7 @@ const RegisterPage = () => {
                     </Link>
                 </div>
 
-                <RegisterForm register={register} classes={classes} errors={errors} reset={reset} />
+                <RegisterForm register={register} classes={classes} errors={errors} reset={reset} setValue={setValue} />
 
                 <button type="submit" className={classes.form__subButton}>
                     Sign up
