@@ -34,9 +34,29 @@ export const ObjectGroupService = ApiService.injectEndpoints({
                 method: 'DELETE'
             }),
             invalidatesTags: ['/object-group']
+        }),
+
+        setOptimalObject: builder.mutation<
+            {message: string},
+            {object_group_id: number; optimal_object_id: number | null}
+        >({
+            query: (args) => {
+                const {object_group_id, optimal_object_id} = args;
+
+                return {
+                    method: 'POST',
+                    url: `${ObjectGroupUrl}/optimal-object`,
+                    body: {object_group_id, optimal_object_id}
+                };
+            },
+            invalidatesTags: ['/object-group']
         })
     })
 });
 
-export const {useGetObjectGroupsByClientIdQuery, useCreateObjectGroupMutation, useDeleteObjectGroupByIdMutation} =
-    ObjectGroupService;
+export const {
+    useGetObjectGroupsByClientIdQuery,
+    useCreateObjectGroupMutation,
+    useDeleteObjectGroupByIdMutation,
+    useSetOptimalObjectMutation
+} = ObjectGroupService;

@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import MapLayout from '../../mapLayout';
 import {YMapControls, YMapListener} from '../../../lib/ymaps';
-import type {Margin, BehaviorType, DomEventHandler, YMapLocationRequest} from '../../../lib/ymaps';
+import type {Margin, BehaviorType, DomEventHandler, YMapLocationRequest, LngLat} from '../../../lib/ymaps';
 import type {INewObject, IObject} from '../../../types/Object';
 import type {IObjectGroup} from '../../../types/ObjectGroup';
 import {DEFAULT_LOCATION, bbox} from '../../../utils/map';
@@ -11,8 +11,9 @@ import {
     useDeleteObjectByIdMutation,
     useGetObjectsByObjectGroupIdQuery
 } from '../../../api/ObjectService';
-import {useDeleteObjectGroupByIdMutation} from '../../../api/ObjectGroupService';
+import {useDeleteObjectGroupByIdMutation, useSetOptimalObjectMutation} from '../../../api/ObjectGroupService';
 import MapObjectMarker from '../../mapObjectMarker';
+import {useLazyGetMatrixQuery} from '../../../api/RouteService';
 
 const MAP_MARGIN = [75, 75, 75, 75] as Margin;
 const STATIC_MAP_BEHAVIORS: BehaviorType[] = [];
@@ -26,6 +27,7 @@ function ObjectGroupItem({group}: ObjectGroupItemProps) {
     const [isChangeObjects, setIsChangeObjects] = useState(false);
     const [objects, setObject] = useState<IObject[]>([]);
     const [unsavedObjects, setUnsavedNewObjects] = useState<INewObject[]>([]);
+    const [optimalObjectId, setOptimalObjectId] = useState<number | null>(group.optimal_object_id);
 
     const [createObject] = useCreateObjectMutation();
     const [deleteObject] = useDeleteObjectByIdMutation();
@@ -34,12 +36,50 @@ function ObjectGroupItem({group}: ObjectGroupItemProps) {
     const {data, isLoading} = useGetObjectsByObjectGroupIdQuery(group.object_group_id);
 
     const [deleteObjectGroup] = useDeleteObjectGroupByIdMutation();
+    const [setOptimalObject] = useSetOptimalObjectMutation();
+
+    const [getMatrix] = useLazyGetMatrixQuery(undefined);
+
+    const findOptimalObjectId = useCallback(async (objects: IObject[]) => {
+        if (objects.length === 0) {
+            setOptimalObject({object_group_id: group.object_group_id, optimal_object_id: null});
+            return;
+        }
+
+        if (objects.length === 1) {
+            setOptimalObject({object_group_id: group.object_group_id, optimal_object_id: objects[0].object_id});
+            return;
+        }
+
+        const objectsCoordinates = objects.map((object) => object.coordinates);
+
+        const optimalObjectCoordinates = (
+            await getMatrix({
+                origins: objectsCoordinates,
+                destinations: objectsCoordinates
+            }).unwrap()
+        ).matrix.origin;
+
+        for (const object of objects) {
+            if (
+                optimalObjectCoordinates[0] === object.coordinates[0] &&
+                optimalObjectCoordinates[1] === object.coordinates[1]
+            ) {
+                setOptimalObjectId(object.object_id);
+                setOptimalObject({object_group_id: group.object_group_id, optimal_object_id: object.object_id});
+                break;
+            }
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         if (data) {
             setObject(data.data);
+            findOptimalObjectId(data.data);
         }
-    }, [data]);
+    }, [data, findOptimalObjectId]);
 
     useEffect(() => {
         if (isChangeObjects) {
@@ -126,6 +166,7 @@ function ObjectGroupItem({group}: ObjectGroupItemProps) {
                             coordinates={object.coordinates}
                             onClick={() => onClickObjectHandler(object.object_id)}
                             status={object.status}
+                            isOptimal={object.object_id === optimalObjectId}
                         />
                     ))}
 

@@ -1,7 +1,7 @@
 import {useNavigate} from 'react-router-dom';
 import MapLayout from '../../components/mapLayout';
 import {useAppDispatch} from '../../hooks/useAppDispatch';
-import {LngLat, YMapDefaultMarker} from '../../lib/ymaps';
+import {LngLat} from '../../lib/ymaps';
 import MapObjectMarker from '../../components/mapObjectMarker';
 import {useEffect, useState} from 'react';
 import {useSetObjectStatusMutation} from '../../api/AdminService';
@@ -22,6 +22,7 @@ const MainPage = () => {
     const {data, isLoading} = useGetInfoQuery(undefined);
     const [setObjectsStatus] = useSetObjectStatusMutation();
     const [objects, setObjects] = useState<IObject[]>([]);
+    const [optimalObjectsId, setOptimalObjectsId] = useState<number[]>([]);
     const [selectMarker, setSelectMarker] = useState<IObject | null>(null);
     const [route, setRoute] = useState<Route | null>(null);
     const [driverCoordinates, setDriverCoordinates] = useState<LngLat | undefined>(undefined);
@@ -33,11 +34,15 @@ const MainPage = () => {
         setObjects([]);
         if (!isLoading && data) {
             data.data.map((client) =>
-                client.groups.map((group) =>
-                    group.objects.map((object) => {
+                client.groups.map((group) => {
+                    if (group.optimal_object_id) {
+                        setOptimalObjectsId((prev) => [...prev, group.optimal_object_id!]);
+                    }
+
+                    return group.objects.map((object) => {
                         return setObjects((prevObjects) => [...prevObjects, object]);
-                    })
-                )
+                    });
+                })
             );
         }
     }, [data, isLoading]);
@@ -96,8 +101,9 @@ const MainPage = () => {
                             <MapObjectMarker
                                 coordinates={obj.coordinates}
                                 key={obj.object_id}
-                                status={obj.status}
                                 onClick={() => handleClickMarker(obj)}
+                                status={obj.status}
+                                isOptimal={optimalObjectsId.includes(obj.object_id)}
                             />
                         );
                     })}
