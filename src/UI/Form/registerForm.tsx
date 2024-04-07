@@ -1,6 +1,8 @@
 import {FC, useEffect, useState} from 'react';
-import type {FieldErrors, UseFormRegister, UseFormReset, UseFormSetValue} from 'react-hook-form';
+import type {FieldErrors, UseFormGetValues, UseFormRegister, UseFormReset} from 'react-hook-form';
 import {useLazyGetClientsQuery} from '../../api/ClientService';
+import {useLazyGetObjectGroupsByClientIdQuery} from '../../api/ObjectGroupService';
+import {useLazyGetObjectsByObjectGroupIdQuery} from '../../api/ObjectService';
 import {RegisterFrom} from '../../pages/registerPage/registerPage';
 import {Roles} from '../../types/User';
 
@@ -11,26 +13,38 @@ interface RegisterFormProps {
     };
     errors: FieldErrors<RegisterFrom>;
     reset: UseFormReset<RegisterFrom>;
-    setValue: UseFormSetValue<RegisterFrom>;
+    getValues: UseFormGetValues<RegisterFrom>;
 }
 
-export const RegisterForm: FC<RegisterFormProps> = ({register, classes, errors, reset, setValue}) => {
+export const RegisterForm: FC<RegisterFormProps> = ({register, classes, errors, reset, getValues}) => {
     const [role, setRole] = useState<Roles>('driver');
-    const [nameOrg, setNameOrg] = useState<[{client_ig: number; name_org: string}] | []>([]);
-    const [clientId, setClientId] = useState<number | ''>('');
+    const [nameOrg, setNameOrg] = useState<[{client_id: number; name_org: string}] | []>([]);
+    const [selectedClient, setSelectedClient] = useState<{client_id: number; name_org: string} | undefined>(undefined);
     const [getClients] = useLazyGetClientsQuery();
+    const [getObjectsByObjectGroup] = useLazyGetObjectsByObjectGroupIdQuery();
+    const [getObjectGroupByClientId] = useLazyGetObjectGroupsByClientIdQuery();
     useEffect(() => {
         const fetchClients = async () => {
             const fetchedClients = await getClients('');
             setNameOrg(fetchedClients.data.data);
-            setValue('nameOrg', nameOrg[0]?.name_org!);
-            setValue('client_id', nameOrg[0]?.client_ig!);
         };
 
         if (role === 'driver') {
             fetchClients();
         }
-    }, [nameOrg, getClients, role, setValue]);
+    }, [nameOrg, getClients, role]);
+
+    useEffect(() => {
+        const fetchObjects = async () => {
+            if (selectedClient?.client_id) {
+                const objectGroupId = await getObjectGroupByClientId(selectedClient?.client_id);
+                const optimalObject = await getObjectsByObjectGroup(objectGroupId)
+            }
+        };
+
+        console.log(getValues('client_id'));
+    }, [getValues]);
+
     const selectForm = () => {
         switch (role) {
             case 'client':
@@ -70,24 +84,30 @@ export const RegisterForm: FC<RegisterFormProps> = ({register, classes, errors, 
                             className={classes.form__input}
                         />
                         {errors.fullName && <div className={classes.error}>Это поле является обязательным</div>}
+
                         <select
                             className={classes.form__input}
-                            defaultValue={nameOrg[0]?.client_ig}
-                            {...register('nameOrg', {required: true})}
+                            defaultValue={-1}
+                            onClick={() => {
+                                setSelectedClient(
+                                    nameOrg.find((client) => client.client_id === +getValues('client_id'))
+                                );
+                                console.log(selectedClient);
+                            }}
+                            {...register('client_id', {required: true})}
                         >
+                            <option value={-1} disabled>
+                                Select the name of the organization
+                            </option>
                             {nameOrg.map((client) => {
-                                return <option value={client.client_ig}>{client.name_org}</option>;
+                                return (
+                                    <option value={client.client_id} key={client.client_id}>
+                                        {client.name_org}
+                                    </option>
+                                );
                             })}
                         </select>
-                        {errors.nameOrg && <div className={classes.error}>Это поле является обязательным</div>}
-                        <input type="hidden" {...register('client_id')} value={clientId!} />
-                        {/* <input
-                            type="text"
-                            {...register('nameOrg', {required: true})}
-                            placeholder="Organization name"
-                            className={classes.form__input}
-                        />
-                        {errors.nameOrg && <div className={classes.error}>Это поле является обязательным</div>} */}
+                        {errors.client_id && <div className={classes.error}>{errors.client_id.message}</div>}
                         <input
                             type="email"
                             {...register('email', {required: true})}

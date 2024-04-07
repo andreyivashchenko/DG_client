@@ -28,6 +28,6 @@ export interface IClientRegister extends Omit<UserRegister, 'name'> {
 export interface IDriverRegister extends IClientRegister {
     fullName: string;
     nameOrg: string;
-    client_id: number;
+    client_id: string;
 }
 export interface IAdminRegister extends UserRegister {}

@@ -23,7 +23,7 @@ const RegisterPage = () => {
         formState: {errors},
         setError,
         reset,
-        setValue
+        getValues
     } = useForm<RegisterFrom>();
     const onSubmit: SubmitHandler<RegisterFrom> = (data) => {
         let dataToFetch: RegisterFrom = {
@@ -33,7 +33,7 @@ const RegisterPage = () => {
             role: 'client',
             email: '',
             pass: '',
-            client_id: 0
+            client_id: '0'
         };
         if (data.role === 'client') {
             dataToFetch['nameOrg'] = data.nameOrg;
@@ -46,16 +46,23 @@ const RegisterPage = () => {
         dataToFetch['email'] = data.email;
         dataToFetch['pass'] = data.pass;
         dataToFetch['role'] = data.role;
-        // handleRegister(data);
-        console.log(data);
+        handleRegister(data);
     };
     const handleRegister = async (user: RegisterFrom) => {
         try {
+            if (user.client_id === '-1') {
+                throw new Error('Вы не указали организацию!', {cause: 'client_id is not selected'});
+            }
             const res = await registerUser(user).unwrap();
             if (res) dispatch(setUser(res));
             navigate(fromPage, {replace: true});
         } catch (error: any) {
-            if (error) {
+            if (error.cause === 'client_id is not selected') {
+                setError('client_id', {
+                    type: errors.client_id?.type,
+                    message: error.message
+                });
+            } else if (error) {
                 setError('root.serverError', {
                     type: error.error.status,
                     message: error.error.data.message
@@ -74,7 +81,13 @@ const RegisterPage = () => {
                     </Link>
                 </div>
 
-                <RegisterForm register={register} classes={classes} errors={errors} reset={reset} setValue={setValue} />
+                <RegisterForm
+                    register={register}
+                    classes={classes}
+                    errors={errors}
+                    reset={reset}
+                    getValues={getValues}
+                />
 
                 <button type="submit" className={classes.form__subButton}>
                     Sign up

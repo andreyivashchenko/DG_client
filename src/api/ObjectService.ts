@@ -41,4 +41,9 @@ export const ObjectService = ApiService.injectEndpoints({
     })
 });
 
-export const {useCreateObjectMutation, useGetObjectsByObjectGroupIdQuery, useDeleteObjectByIdMutation} = ObjectService;
+export const {
+    useCreateObjectMutation,
+    useGetObjectsByObjectGroupIdQuery,
+    useLazyGetObjectsByObjectGroupIdQuery,
+    useDeleteObjectByIdMutation
+} = ObjectService;

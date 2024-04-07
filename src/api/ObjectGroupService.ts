@@ -58,5 +58,6 @@ export const {
     useGetObjectGroupsByClientIdQuery,
     useCreateObjectGroupMutation,
     useDeleteObjectGroupByIdMutation,
-    useSetOptimalObjectMutation
+    useSetOptimalObjectMutation,
+    useLazyGetObjectGroupsByClientIdQuery
 } = ObjectGroupService;
