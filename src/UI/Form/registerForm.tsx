@@ -38,7 +38,7 @@ export const RegisterForm: FC<RegisterFormProps> = ({register, classes, errors, 
         const fetchObjects = async () => {
             if (selectedClient?.client_id) {
                 const objectGroupId = await getObjectGroupByClientId(selectedClient?.client_id);
-                const optimalObject = await getObjectsByObjectGroup(objectGroupId)
+                //const optimalObject = await getObjectsByObjectGroup(objectGroupId);
             }
         };
 

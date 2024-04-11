@@ -1,5 +1,5 @@
 import {Outlet} from 'react-router-dom';
-import {useGetClientByUserIdQuery} from '../../../api/UserService';
+import {useGetDriverByUserIdQuery} from '../../../api/UserService';
 import {useAppSelector} from '../../../hooks/useAppSelector';
 import {useEffect} from 'react';
 import {useAppDispatch} from '../../../hooks/useAppDispatch';
@@ -10,11 +10,11 @@ const Layout = () => {
 
     const {user, roleId} = useAppSelector((state) => state.auth)!;
 
-    const {data, error} = useGetClientByUserIdQuery(+user?.id!);
+    const {data, error} = useGetDriverByUserIdQuery(+user?.id!);
 
     useEffect(() => {
         if (data) {
-            dispatch(setRoleId({roleId: data.data.client_id}));
+            dispatch(setRoleId({roleId: data.data.driver_id}));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);

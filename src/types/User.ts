@@ -11,12 +11,13 @@ export interface PrivateRoutesProps {
     children: ReactNode;
 }
 export interface IUser {
-    _id: string;
+    id: string;
     name: string;
     email: string;
     role: Roles;
+    token?: string;
 }
-export interface UserCredentials extends Omit<IUser, '_id' | 'role'> {
+export interface UserCredentials extends Omit<IUser, 'id' | 'role'> {
     pass: string;
 }
 export interface UserRegister extends UserCredentials {

@@ -8,12 +8,6 @@ export interface IClientResp {
 }
 export const ClientService = ApiService.injectEndpoints({
     endpoints: (builder) => ({
-        getClientByUserId: builder.query<IClientResp, number>({
-            query: (arg) => ({
-                url: `${ClientUrl}/${arg}`
-            }),
-            providesTags: ['/client/id']
-        }),
         getClients: builder.query({
             query: () => `${ClientUrl}/`,
             providesTags: ['/client/']
@@ -21,4 +15,4 @@ export const ClientService = ApiService.injectEndpoints({
     })
 });
 
-export const {useGetClientByUserIdQuery, useLazyGetClientsQuery} = ClientService;
+export const {useLazyGetClientsQuery} = ClientService;
