@@ -1,7 +1,8 @@
 import ClientPage from '../pages/clientPages/clientPage';
-import DriverPage from '../pages/driverPage';
+import DriverPage from '../pages/driverPage/driverPage';
 import LoginPage from '../pages/loginPage/loginPage';
-import MainPage from '../pages/mainPage/mainPage';
+import DriverDistrPage from '../pages/mainPages/driverDistrPage';
+import MainPage from '../pages/mainPages/mainPage';
 import RegisterPage from '../pages/registerPage/registerPage';
 import type {RoutePathElement} from '../types/User';
 
@@ -20,7 +21,8 @@ export const adminRoutes: RoutePathElement[] = [
     {
         path: '/main',
         element: <MainPage />
-    }
+    },
+    {path: '/main/drivers', element: <DriverDistrPage />}
 ];
 
 export const driverRoutes: RoutePathElement[] = [

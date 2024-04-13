@@ -1,13 +1,13 @@
 import {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {useLazyGetRouteQuery} from '../api/RouteService';
-import DriverRoute from '../components/DriverRoute';
-import MapLayout from '../components/mapLayout';
-import {useAppDispatch} from '../hooks/useAppDispatch';
-import {LngLat, YMapDefaultMarker} from '../lib/ymaps';
-import {logout} from '../store/slices/AuthSlice';
-import type {Route} from '../types/Map';
-import {navigation} from '../utils/navigation';
+import {useLazyGetRouteQuery} from '../../api/RouteService';
+import DriverRoute from '../../components/DriverRoute';
+import MapLayout from '../../components/mapLayout';
+import {useAppDispatch} from '../../hooks/useAppDispatch';
+import {LngLat, YMapDefaultMarker} from '../../lib/ymaps';
+import {logout} from '../../store/slices/AuthSlice';
+import type {Route} from '../../types/Map';
+import {navigation} from '../../utils/navigation';
 
 const DriverPage = () => {
     const dispatch = useAppDispatch();

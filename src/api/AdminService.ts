@@ -1,6 +1,6 @@
-import {ApiService} from './ApiService';
 import type {IInfo} from '../types/Admin';
 import type {Status} from '../types/Object';
+import {ApiService} from './ApiService';
 
 const AdminUrl = '/admin';
 
@@ -26,8 +26,19 @@ export const AdminService = ApiService.injectEndpoints({
                 };
             },
             invalidatesTags: ['/admin']
+        }),
+        setDriverData: builder.mutation({
+            query: (args) => {
+                const {driverId, objectGroupId, nameOrg, status} = args;
+
+                return {
+                    url: `${AdminUrl}/set-driver`,
+                    method: 'POST',
+                    body: {driverId, objectGroupId, nameOrg, status}
+                };
+            }
         })
     })
 });
 
-export const {useGetInfoQuery, useSetObjectStatusMutation} = AdminService;
+export const {useGetInfoQuery, useSetObjectStatusMutation, useSetDriverDataMutation} = AdminService;
