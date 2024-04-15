@@ -19,12 +19,14 @@ export const UserService = ApiService.injectEndpoints({
         getClientByUserId: builder.query<IClientResp, number>({
             query: (arg) => ({
                 url: `${UserUrl}/client/${arg}`
-            })
+            }),
+            providesTags: ['/client']
         }),
         getDriverByUserId: builder.query<IDriverResp, number>({
             query: (arg) => ({
                 url: `${UserUrl}/driver/${arg}`
-            })
+            }),
+            providesTags: ['/driver']
         })
     })
 });

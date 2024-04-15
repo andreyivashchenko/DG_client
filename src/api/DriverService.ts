@@ -13,7 +13,8 @@ export const DriverService = ApiService.injectEndpoints({
                     method: 'POST',
                     body: {driver_id, coordinates}
                 };
-            }
+            },
+            invalidatesTags: ['/driver']
         })
     })
 });

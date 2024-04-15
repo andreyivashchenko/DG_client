@@ -3,18 +3,18 @@ import {useGetDriverByUserIdQuery} from '../../../api/UserService';
 import {useAppSelector} from '../../../hooks/useAppSelector';
 import {useEffect} from 'react';
 import {useAppDispatch} from '../../../hooks/useAppDispatch';
-import {setRoleId} from '../../../store/slices/AuthSlice';
+import {setRoleData} from '../../../store/slices/AuthSlice';
 
 const Layout = () => {
     const dispatch = useAppDispatch();
 
-    const {user, roleId} = useAppSelector((state) => state.auth)!;
+    const {user, roleData} = useAppSelector((state) => state.auth)!;
 
     const {data, error} = useGetDriverByUserIdQuery(+user?.id!);
 
     useEffect(() => {
         if (data) {
-            dispatch(setRoleId({roleId: data.data.driver_id}));
+            dispatch(setRoleData({roleData: data.data}));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
@@ -23,7 +23,7 @@ const Layout = () => {
         return <div>{(error as {data: {message: string}}).data.message}</div>;
     }
 
-    return !roleId ? <div>Role Loading</div> : <Outlet />;
+    return !roleData ? <div>Role Loading</div> : <Outlet />;
 };
 
 export default Layout;

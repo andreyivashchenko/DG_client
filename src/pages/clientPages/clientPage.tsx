@@ -6,6 +6,7 @@ import {useState, useEffect, useCallback} from 'react';
 import ObjectGroupItem from '../../components/client/objectGroupItem';
 import {IObjectGroup} from '../../types/ObjectGroup';
 import {useCreateObjectGroupMutation, useGetObjectGroupsByClientIdQuery} from '../../api/ObjectGroupService';
+import {IClient} from '../../types/Client';
 
 const ClientPage = () => {
     const dispatch = useAppDispatch();
@@ -17,7 +18,7 @@ const ClientPage = () => {
 
     const [groups, setGroups] = useState<IObjectGroup[]>([]);
 
-    const clientId = useAppSelector((state) => state.auth.roleId)!;
+    const clientId = useAppSelector((state) => (state.auth.roleData as IClient).client_id)!;
 
     const {data, isLoading} = useGetObjectGroupsByClientIdQuery(clientId);
 

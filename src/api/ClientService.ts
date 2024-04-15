@@ -10,7 +10,7 @@ export const ClientService = ApiService.injectEndpoints({
     endpoints: (builder) => ({
         getClients: builder.query({
             query: () => `${ClientUrl}/`,
-            providesTags: ['/client/']
+            providesTags: ['/client']
         })
     })
 });
