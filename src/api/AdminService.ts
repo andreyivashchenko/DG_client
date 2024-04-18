@@ -8,6 +8,23 @@ export interface IAdminResp {
     message: string;
     data: IInfo[];
 }
+export interface IClientsWithDrivers {
+    client_id: number;
+    name_org: string;
+    groups:
+        | {
+              object_group_id: number;
+              optimal_object_id: number;
+              drivers: {driver_id: number; full_name: string}[] | [];
+          }[]
+        | [];
+}
+
+export interface IClientsWithDriversResp {
+    success: boolean;
+    message: string;
+    data: IClientsWithDrivers[];
+}
 
 export const AdminService = ApiService.injectEndpoints({
     endpoints: (builder) => ({
@@ -29,16 +46,20 @@ export const AdminService = ApiService.injectEndpoints({
         }),
         setDriverData: builder.mutation({
             query: (args) => {
-                const {driverId, objectGroupId, nameOrg, status} = args;
+                const {driverId, objectGroupId, status} = args;
 
                 return {
                     url: `${AdminUrl}/set-driver`,
                     method: 'POST',
-                    body: {driverId, objectGroupId, nameOrg, status}
+                    body: {driverId, objectGroupId, status}
                 };
             }
+        }),
+        getClientsWithDrivers: builder.query<IClientsWithDriversResp, undefined>({
+            query: () => `${AdminUrl}/test`
         })
     })
 });
 
-export const {useGetInfoQuery, useSetObjectStatusMutation, useSetDriverDataMutation} = AdminService;
+export const {useGetInfoQuery, useSetObjectStatusMutation, useSetDriverDataMutation, useGetClientsWithDriversQuery} =
+    AdminService;

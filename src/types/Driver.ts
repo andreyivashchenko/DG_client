@@ -6,6 +6,11 @@ export interface IDriver {
     coordinates: LngLat;
     object_group_id: number;
     full_name: string;
-    name_org: string;
     status: string;
 }
+
+export interface IDriverWithCLient extends IDriver {
+    client_id: number;
+}
+
+export interface IDriverWithName extends Omit<IDriver, 'coordinates' | 'user_id ' | 'status'> {}

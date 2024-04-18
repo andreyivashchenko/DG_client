@@ -1,12 +1,17 @@
 import {LngLat} from '@yandex/ymaps3';
-import {IDriver} from '../types/Driver';
+import {IDriverWithCLient, IDriverWithName} from '../types/Driver';
 import {ApiService} from './ApiService';
 
 const DriverUrl = '/driver';
 interface GetDriversResponse {
     success: boolean;
     message: string;
-    data?: Omit<IDriver, 'coordinates' | 'user_id'>[];
+    data?: Omit<IDriverWithCLient, 'coordinates' | 'user_id'>[];
+}
+interface GetFreeDriversResp {
+    success: boolean;
+    message: string;
+    data: IDriverWithName[];
 }
 
 export const DriverService = ApiService.injectEndpoints({
@@ -23,8 +28,11 @@ export const DriverService = ApiService.injectEndpoints({
         }),
         getDrivers: builder.query<GetDriversResponse, undefined>({
             query: () => `${DriverUrl}`
+        }),
+        getFreeDrivers: builder.query<GetFreeDriversResp, undefined>({
+            query: () => `${DriverUrl}/free`
         })
     })
 });
 
-export const {useUpdateDriverCoordinatesMutation, useGetDriversQuery} = DriverService;
+export const {useUpdateDriverCoordinatesMutation, useGetDriversQuery, useGetFreeDriversQuery} = DriverService;
