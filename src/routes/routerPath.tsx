@@ -1,5 +1,5 @@
 import ClientPage from '../pages/clientPages/clientPage';
-import DriverPage from '../pages/driverPage/driverPage';
+import DriverPage from '../pages/driverPage';
 import LoginPage from '../pages/loginPage/loginPage';
 import MainPage from '../pages/mainPages/mainPage';
 import NewDriversPage from '../pages/mainPages/newDriversPage';

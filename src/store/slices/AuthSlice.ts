@@ -1,6 +1,8 @@
 // authSlice.ts
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {IUser, Roles} from '../../types/User';
+import {IUser} from '../../types/User';
+import {IDriver} from '../../types/Driver';
+import {IClient} from '../../types/Client';
 
 export interface AuthResponse {
     user: IUser;
@@ -11,15 +13,13 @@ export interface AuthResponse {
 interface AuthState {
     user: IUser | null;
     isAuthenticated: boolean;
-    role: Roles | null;
-    roleId: number | null;
+    roleData: IDriver | IClient | null;
 }
 
 const initialState: AuthState = {
     user: null,
     isAuthenticated: false,
-    role: null,
-    roleId: null
+    roleData: null
 };
 
 export const authSlice = createSlice({
@@ -30,18 +30,16 @@ export const authSlice = createSlice({
             state.user = action.payload.user;
             state.isAuthenticated = action.payload.success;
         },
-        setRole: (state, action: PayloadAction<Omit<AuthState, 'user' | 'isAuthenticated'>>) => {
-            state.role = action.payload.role;
-            state.roleId = action.payload.roleId;
+        setRoleData: (state, action: PayloadAction<Omit<AuthState, 'user' | 'isAuthenticated'>>) => {
+            state.roleData = action.payload.roleData;
         },
         logout: (state) => {
             state.user = null;
             state.isAuthenticated = false;
-            state.role = null;
-            state.roleId = null;
+            state.roleData = null;
         }
     }
 });
 
-export const {setUser, setRole, logout} = authSlice.actions;
+export const {setUser, setRoleData, logout} = authSlice.actions;
 export default authSlice.reducer;

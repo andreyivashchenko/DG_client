@@ -1,3 +1,4 @@
+import {IObject} from '../types/Object';
 import {IObjectGroup} from '../types/ObjectGroup';
 import {ApiService} from './ApiService';
 
@@ -50,6 +51,13 @@ export const ObjectGroupService = ApiService.injectEndpoints({
                 };
             },
             invalidatesTags: ['/object-group']
+        }),
+
+        getOptimalObject: builder.query<{message: string; data: IObject}, number>({
+            query: (arg) => ({
+                url: `${ObjectGroupUrl}/optimal-object/${arg}`
+            }),
+            providesTags: ['/object-group']
         })
     })
 });
@@ -59,5 +67,6 @@ export const {
     useCreateObjectGroupMutation,
     useDeleteObjectGroupByIdMutation,
     useSetOptimalObjectMutation,
-    useLazyGetObjectGroupsByClientIdQuery
+    useLazyGetObjectGroupsByClientIdQuery,
+    useLazyGetOptimalObjectQuery
 } = ObjectGroupService;

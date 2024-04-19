@@ -1,23 +1,9 @@
 import {useMemo} from 'react';
 import type {LngLat} from '../../lib/ymaps';
-import {YMapFeature, YMapMarker} from '../../lib/ymaps';
+import {YMapFeature} from '../../lib/ymaps';
 import type {Route} from '../../types/Map';
 import {findNearestIndex} from '../../utils/math';
 import {getFeatureCoordinates, getFeatureGeometry, getFeatureStyle} from './utils';
-
-import classes from './index.module.scss';
-
-interface DriverPointProps {
-    point: LngLat;
-}
-
-function DriverPoint({point}: DriverPointProps) {
-    return (
-        <YMapMarker coordinates={point}>
-            <div className={classes['driver-point']}></div>
-        </YMapMarker>
-    );
-}
 
 interface DriverRouteProps {
     route: Route;
@@ -45,7 +31,6 @@ function DriverRoute({route, driverCoordinates, color}: DriverRouteProps) {
         <>
             <YMapFeature geometry={routeFeatures.remaining.geometry} style={routeFeatures.remaining.style} />
             <YMapFeature geometry={routeFeatures.past.geometry} style={routeFeatures.past.style} />
-            {driverCoordinates && <DriverPoint point={driverCoordinates} />}
         </>
     );
 }

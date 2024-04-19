@@ -46,7 +46,7 @@ const DriverDistrPage = () => {
     const onSubmit: SubmitHandler<SetDriverDataForm> = (data) => {
         const dataForSend = {
             driverId: +data.driver_id,
-            objectGroupId: +data.object_group_id,
+            objectGroupId: +data.object_group_id!,
 
             status: data.status
         };

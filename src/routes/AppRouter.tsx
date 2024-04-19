@@ -1,5 +1,6 @@
 import {Link, Route, Routes} from 'react-router-dom';
 import ClientLayout from '../components/client/layout';
+import DriverLayout from '../components/driver/layout';
 import {useAppSelector} from '../hooks/useAppSelector';
 import Layout from '../pages/layout';
 import {adminRoutes, clientRoutes, driverRoutes, publicRoutes} from './routerPath';
@@ -30,24 +31,30 @@ const AppRouter = () => {
                       ))}
 
                 {/* FIXME: после теста добавить проверку приватности водителя */}
-                {true
-                    ? driverRoutes.map((route) => <Route path={route.path} element={route.element} key={route.path} />)
-                    : driverRoutes.map((route) => (
-                          <Route
-                              path={route.path}
-                              element={
-                                  <div>
-                                      У вас нет доступа к странице водителя!
-                                      <Link to={'/'}>Вернуться на главную</Link>
-                                  </div>
-                              }
-                              key={route.path}
-                          />
-                      ))}
+                {true ? (
+                    <Route path="/driver" element={<DriverLayout />}>
+                        {driverRoutes.map((route) => (
+                            <Route path={route.path} element={route.element} key={route.path} />
+                        ))}
+                    </Route>
+                ) : (
+                    driverRoutes.map((route) => (
+                        <Route
+                            path={route.path}
+                            element={
+                                <div>
+                                    У вас нет доступа к странице водителя!
+                                    <Link to={'/'}>Вернуться на главную</Link>
+                                </div>
+                            }
+                            key={route.path}
+                        />
+                    ))
+                )}
 
                 {/* FIXME: после теста добавить проверку приватности клиента */}
                 {true ? (
-                    <Route path="client" element={<ClientLayout />}>
+                    <Route path="/client" element={<ClientLayout />}>
                         {clientRoutes.map((route) => (
                             <Route path={route.path} element={route.element} key={route.path} />
                         ))}
