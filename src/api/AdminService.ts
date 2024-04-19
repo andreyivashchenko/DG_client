@@ -46,20 +46,37 @@ export const AdminService = ApiService.injectEndpoints({
         }),
         setDriverData: builder.mutation({
             query: (args) => {
-                const {driverId, objectGroupId, status} = args;
+                const {object_group_id, drivers} = args;
 
                 return {
                     url: `${AdminUrl}/set-driver`,
                     method: 'POST',
-                    body: {driverId, objectGroupId, status}
+                    body: {object_group_id, drivers}
                 };
-            }
+            },
+            invalidatesTags: ['change-drivers', 'second-change-drivers']
         }),
         getClientsWithDrivers: builder.query<IClientsWithDriversResp, undefined>({
-            query: () => `${AdminUrl}/test`
+            query: () => `${AdminUrl}/test`,
+            providesTags: ['change-drivers']
+        }),
+        removeDriverFromGroup: builder.mutation({
+            query: ({driverId}) => {
+                return {
+                    url: `${AdminUrl}/remove-driver`,
+                    method: 'POST',
+                    body: {driverId}
+                };
+            },
+            invalidatesTags: ['change-drivers', 'second-change-drivers']
         })
     })
 });
 
-export const {useGetInfoQuery, useSetObjectStatusMutation, useSetDriverDataMutation, useGetClientsWithDriversQuery} =
-    AdminService;
+export const {
+    useGetInfoQuery,
+    useSetObjectStatusMutation,
+    useSetDriverDataMutation,
+    useGetClientsWithDriversQuery,
+    useRemoveDriverFromGroupMutation
+} = AdminService;

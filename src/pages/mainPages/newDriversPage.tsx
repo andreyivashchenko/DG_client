@@ -1,6 +1,10 @@
 import {useEffect, useState} from 'react';
 import {SubmitHandler, useForm} from 'react-hook-form';
-import {useGetClientsWithDriversQuery} from '../../api/AdminService';
+import {
+    useGetClientsWithDriversQuery,
+    useRemoveDriverFromGroupMutation,
+    useSetDriverDataMutation
+} from '../../api/AdminService';
 import {useGetFreeDriversQuery} from '../../api/DriverService';
 import PopupWindow from '../../components/UI/PopupWindow/PopupWindow';
 import {IDriverWithName} from '../../types/Driver';
@@ -14,6 +18,8 @@ const NewDriversPage = () => {
     const [popupActive, setPopupActive] = useState<boolean>(false);
     const [freeDrivers, setFreeDrivers] = useState<IDriverWithName[] | undefined>();
     const [rerender, setRerender] = useState<boolean>(false);
+    const [setDrivers] = useSetDriverDataMutation();
+    const [removeDriver] = useRemoveDriverFromGroupMutation();
 
     const {
         register,
@@ -29,7 +35,25 @@ const NewDriversPage = () => {
         data.drivers = data.drivers.filter((item) => item).map((item) => +item);
         const checkSet = new Set(data.drivers);
         if (checkSet.size !== data.drivers.length) alert('Указаны одинаковые водители');
+        const foundedClient = ClientsWithDrivers?.data.find((item) => {
+            if (item.groups) {
+                return item.groups.some((group) => group.object_group_id === data.object_group_id);
+            }
+            return false;
+        });
+        const foundedGroup = foundedClient?.groups?.find((item) => item.object_group_id === data.object_group_id);
+        foundedGroup?.drivers.forEach((driver) => {
+            if (!data.drivers.includes(driver.driver_id)) removeDriver({driverId: driver.driver_id});
+        });
+        const driversToSend: number[] = [];
+        data.drivers.forEach((driverId) => {
+            const driverExist = foundedGroup?.drivers.some((driver) => driver.driver_id === driverId);
+            if (!driverExist) driversToSend.push(driverId);
+        });
+        data.drivers = driversToSend;
 
+        setDrivers(data);
+        reset();
         setPopupActive(false);
     };
 
@@ -41,6 +65,7 @@ const NewDriversPage = () => {
             return false;
         });
         const foundedGroup = foundedClient?.groups?.find((item) => item.object_group_id === group_id);
+        console.log(foundedGroup);
         setValue('object_group_id', foundedGroup!.object_group_id);
         foundedGroup?.drivers.forEach((driver, i) => {
             setValue(`drivers.${i}`, driver.driver_id);

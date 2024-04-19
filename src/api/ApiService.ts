@@ -5,6 +5,15 @@ export const ApiService = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://localhost:4000/'
     }),
-    tagTypes: ['/admin', '/object-group', '/object', '/client/id', '/driver/id', '/client/'],
+    tagTypes: [
+        '/admin',
+        '/object-group',
+        '/object',
+        '/client/id',
+        '/driver/id',
+        '/client/',
+        'change-drivers',
+        'second-change-drivers'
+    ],
     endpoints: () => ({})
 });

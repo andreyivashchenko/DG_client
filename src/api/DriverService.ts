@@ -30,7 +30,8 @@ export const DriverService = ApiService.injectEndpoints({
             query: () => `${DriverUrl}`
         }),
         getFreeDrivers: builder.query<GetFreeDriversResp, undefined>({
-            query: () => `${DriverUrl}/free`
+            query: () => `${DriverUrl}/free`,
+            providesTags: ['second-change-drivers']
         })
     })
 });
