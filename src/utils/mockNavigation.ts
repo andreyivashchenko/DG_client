@@ -1,14 +1,7 @@
 import {timeout} from './timeout';
 import type {LngLat} from '../lib/ymaps';
 
-export async function driveTheRoute(routeCoordinates: LngLat[], delay: number, cb: (point: LngLat) => void) {
-    for (const point of routeCoordinates) {
-        cb(point);
-        await timeout(delay);
-    }
-}
-
-export const mockGeolocationApi = async () => {
+export const mockGeolocationApi = () => {
     let updateWatchPosition: (coordinates: LngLat) => void = () => {};
 
     navigator.geolocation.watchPosition = (successCallback) => {
@@ -41,3 +34,12 @@ export const mockGeolocationApi = async () => {
         }
     };
 };
+
+export const mockGeolocation = mockGeolocationApi();
+
+export async function mockDrive(routeCoordinates: LngLat[]) {
+    for (const point of routeCoordinates) {
+        mockGeolocation.updateWatchPosition(point);
+        await timeout(50);
+    }
+}
