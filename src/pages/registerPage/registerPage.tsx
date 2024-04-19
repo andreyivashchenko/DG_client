@@ -1,7 +1,7 @@
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {Link, Navigate, useLocation, useNavigate} from 'react-router-dom';
-import {RegisterForm} from '../../UI/Form/registerForm';
 import {useRegisterMutation} from '../../api/AuthService';
+import {RegisterForm} from '../../components/UI/Form/registerForm';
 import {useAppDispatch} from '../../hooks/useAppDispatch';
 import {useAppSelector} from '../../hooks/useAppSelector';
 import {setUser} from '../../store/slices/AuthSlice';

@@ -1,13 +1,12 @@
-import {useNavigate} from 'react-router-dom';
-import MapLayout from '../../components/mapLayout';
-import {useAppDispatch} from '../../hooks/useAppDispatch';
-import {LngLat} from '../../lib/ymaps';
-import MapObjectMarker from '../../components/mapObjectMarker';
 import {useEffect, useState} from 'react';
-import {useSetObjectStatusMutation} from '../../api/AdminService';
-import {useGetInfoQuery} from '../../api/AdminService';
+import {useNavigate} from 'react-router-dom';
+import {useGetInfoQuery, useSetObjectStatusMutation} from '../../api/AdminService';
 import {useLazyGetRouteQuery} from '../../api/RouteService';
 import DriverRoute from '../../components/DriverRoute';
+import MapLayout from '../../components/mapLayout';
+import MapObjectMarker from '../../components/mapObjectMarker';
+import {useAppDispatch} from '../../hooks/useAppDispatch';
+import {LngLat} from '../../lib/ymaps';
 import {logout} from '../../store/slices/AuthSlice';
 import {Route} from '../../types/Map';
 import {IObject, Status} from '../../types/Object';
@@ -18,6 +17,9 @@ const MainPage = () => {
     const handleLogout = () => {
         dispatch(logout());
         navigate('/login');
+    };
+    const handleDriverDistr = () => {
+        navigate('/main/drivers');
     };
     const {data, isLoading} = useGetInfoQuery(undefined);
     const [setObjectsStatus] = useSetObjectStatusMutation();
@@ -110,6 +112,9 @@ const MainPage = () => {
                 </MapLayout>
             </div>
             <button onClick={handleLogout}>logout</button>
+            <br />
+            <br />
+            <button onClick={handleDriverDistr}>Распределение драйверов</button>
             <br />
             <br />
             {selectMarker ? (

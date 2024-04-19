@@ -1,20 +1,20 @@
+import {throttle} from 'lodash';
 import {useCallback, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import {useLazyGetOptimalObjectQuery} from '../api/ObjectGroupService';
 import {useLazyGetRouteQuery} from '../api/RouteService';
 import DriverRoute from '../components/DriverRoute';
+import MapDriverMarker from '../components/mapDriverMarker';
 import MapLayout from '../components/mapLayout';
+import MapObjectMarker from '../components/mapObjectMarker';
 import {useAppDispatch} from '../hooks/useAppDispatch';
+import {useAppSelector} from '../hooks/useAppSelector';
 import {LngLat} from '../lib/ymaps';
 import {logout} from '../store/slices/AuthSlice';
-import type {Route} from '../types/Map';
-import {useAppSelector} from '../hooks/useAppSelector';
 import {IDriver} from '../types/Driver';
-import {mockDrive} from '../utils/mockNavigation';
-import {throttle} from 'lodash';
-import {useLazyGetOptimalObjectQuery} from '../api/ObjectGroupService';
+import type {Route} from '../types/Map';
 import {IObject} from '../types/Object';
-import MapObjectMarker from '../components/mapObjectMarker';
-import MapDriverMarker from '../components/mapDriverMarker';
+import {mockDrive} from '../utils/mockNavigation';
 
 const DriverPage = () => {
     const dispatch = useAppDispatch();

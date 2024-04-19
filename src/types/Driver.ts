@@ -10,3 +10,9 @@ export interface IDriver {
 }
 
 export type DriverStatus = 'waiting_order' | 'going_to_order' | 'working' | 'going_to_base';
+
+export interface IDriverWithCLient extends IDriver {
+    client_id: number;
+}
+
+export interface IDriverWithName extends Omit<IDriver, 'coordinates' | 'user_id ' | 'status'> {}

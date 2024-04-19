@@ -1,10 +1,7 @@
-import {FC, useEffect, useState} from 'react';
+import {FC, useState} from 'react';
 import type {FieldErrors, UseFormGetValues, UseFormRegister, UseFormReset} from 'react-hook-form';
-import {useLazyGetClientsQuery} from '../../api/ClientService';
-import {useLazyGetObjectGroupsByClientIdQuery} from '../../api/ObjectGroupService';
-import {useLazyGetObjectsByObjectGroupIdQuery} from '../../api/ObjectService';
-import {RegisterFrom} from '../../pages/registerPage/registerPage';
-import {Roles} from '../../types/User';
+import {RegisterFrom} from '../../../pages/registerPage/registerPage';
+import {Roles} from '../../../types/User';
 
 interface RegisterFormProps {
     register: UseFormRegister<RegisterFrom>;
@@ -18,32 +15,32 @@ interface RegisterFormProps {
 
 export const RegisterForm: FC<RegisterFormProps> = ({register, classes, errors, reset, getValues}) => {
     const [role, setRole] = useState<Roles>('driver');
-    const [nameOrg, setNameOrg] = useState<[{client_id: number; name_org: string}] | []>([]);
-    const [selectedClient, setSelectedClient] = useState<{client_id: number; name_org: string} | undefined>(undefined);
-    const [getClients] = useLazyGetClientsQuery();
-    const [getObjectsByObjectGroup] = useLazyGetObjectsByObjectGroupIdQuery();
-    const [getObjectGroupByClientId] = useLazyGetObjectGroupsByClientIdQuery();
-    useEffect(() => {
-        const fetchClients = async () => {
-            const fetchedClients = await getClients('');
-            setNameOrg(fetchedClients.data.data);
-        };
+    // const [nameOrg, setNameOrg] = useState<[{client_id: number; name_org: string}] | []>([]);
+    // const [selectedClient, setSelectedClient] = useState<{client_id: number; name_org: string} | undefined>(undefined);
+    // const [getClients] = useLazyGetClientsQuery();
+    // const [getObjectsByObjectGroup] = useLazyGetObjectsByObjectGroupIdQuery();
+    // const [getObjectGroupByClientId] = useLazyGetObjectGroupsByClientIdQuery();
+    // useEffect(() => {
+    //     const fetchClients = async () => {
+    //         const fetchedClients = await getClients('');
+    //         setNameOrg(fetchedClients.data.data);
+    //     };
 
-        if (role === 'driver') {
-            fetchClients();
-        }
-    }, [nameOrg, getClients, role]);
+    //     if (role === 'driver') {
+    //         fetchClients();
+    //     }
+    // }, [nameOrg, getClients, role]);
 
-    useEffect(() => {
-        const fetchObjects = async () => {
-            if (selectedClient?.client_id) {
-                const objectGroupId = await getObjectGroupByClientId(selectedClient?.client_id);
-                //const optimalObject = await getObjectsByObjectGroup(objectGroupId);
-            }
-        };
+    // useEffect(() => {
+    //     const fetchObjects = async () => {
+    //         if (selectedClient?.client_id) {
+    //             const objectGroupId = await getObjectGroupByClientId(selectedClient?.client_id);
+    //             // const optimalObject = await getObjectsByObjectGroup(objectGчroupId)
+    //         }
+    //     };
 
-        console.log(getValues('client_id'));
-    }, [getValues]);
+    //     console.log(getValues('client_id'));
+    // }, [getValues]);
 
     const selectForm = () => {
         switch (role) {
@@ -85,7 +82,7 @@ export const RegisterForm: FC<RegisterFormProps> = ({register, classes, errors, 
                         />
                         {errors.fullName && <div className={classes.error}>Это поле является обязательным</div>}
 
-                        <select
+                        {/* <select
                             className={classes.form__input}
                             defaultValue={-1}
                             onClick={() => {
@@ -107,7 +104,7 @@ export const RegisterForm: FC<RegisterFormProps> = ({register, classes, errors, 
                                 );
                             })}
                         </select>
-                        {errors.client_id && <div className={classes.error}>{errors.client_id.message}</div>}
+                        {errors.client_id && <div className={classes.error}>{errors.client_id.message}</div>} */}
                         <input
                             type="email"
                             {...register('email', {required: true})}

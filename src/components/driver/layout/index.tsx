@@ -1,14 +1,15 @@
+import {useEffect} from 'react';
 import {Outlet} from 'react-router-dom';
 import {useGetDriverByUserIdQuery} from '../../../api/UserService';
-import {useAppSelector} from '../../../hooks/useAppSelector';
-import {useEffect} from 'react';
 import {useAppDispatch} from '../../../hooks/useAppDispatch';
+import {useAppSelector} from '../../../hooks/useAppSelector';
 import {setRoleData} from '../../../store/slices/AuthSlice';
 
 const Layout = () => {
     const dispatch = useAppDispatch();
 
     const {user, roleData} = useAppSelector((state) => state.auth)!;
+    console.log(user);
 
     const {data, error} = useGetDriverByUserIdQuery(+user?.id!);
 

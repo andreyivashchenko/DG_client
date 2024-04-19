@@ -13,6 +13,16 @@ export const ApiService = createApi({
             }
         }
     }),
-    tagTypes: ['/admin', '/object-group', '/object', '/client/id', '/driver', '/client'],
+    tagTypes: [
+        '/admin',
+        '/object-group',
+        '/object',
+        '/client/id',
+        '/driver/id',
+        '/client',
+        '/driver',
+        'change-drivers',
+        'second-change-drivers'
+    ],
     endpoints: () => ({})
 });
